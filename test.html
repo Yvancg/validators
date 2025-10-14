@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>is-email-safe demo</title>
+<h2>is-email-safe tester</h2>
+<p>Enter an email to validate:</p>
+<input id="email" placeholder="name@example.com" size="40">
+<button onclick="check()">Validate</button>
+<pre id="out"></pre>
+
+<script type="module">
+  import { isEmail, normalizeEmail } from './email.js';
+
+  window.check = () => {
+    const input = document.getElementById('email').value;
+    const norm = normalizeEmail(input);
+    const result = {
+      raw: input,
+      normalized: norm,
+      valid: isEmail(norm),
+    };
+    document.getElementById('out').textContent = JSON.stringify(result, null, 2);
+  };
+</script>
