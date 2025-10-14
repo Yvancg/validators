@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8">
+<h3>phone-e164-safe demo</h3>
+<input id="i" placeholder="type a phone"><button onclick="go()">Check</button>
+<pre id="o"></pre>
+<script type="module">
+  import { normalizePhone, isE164, validateOptionalE164 } from './phone.js';
+  window.go = () => {
+    const raw = document.getElementById('i').value;
+    const norm = normalizePhone(raw);
+    const out = {
+      raw, normalized: norm, isE164: isE164(norm), optionalOk: validateOptionalE164(raw),
+    };
+    document.getElementById('o').textContent = JSON.stringify(out, null, 2);
+  };
+</script>
