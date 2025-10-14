@@ -17,10 +17,11 @@ npm i phone-e164
 Or copy phone.js directly into your project.
 
 ## 📦 Usage
+```bash
 normalizePhone(' (415) 555-0123 '); // "+4155550123"
 isE164('+4155550123'); // true
 validatePhone('415-555-0123'); // true (normalizes to +4155550123)
-
+```
 
 ---
 
