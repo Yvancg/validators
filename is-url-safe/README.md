@@ -1,3 +1,5 @@
+# is-url-safe
+
 Strict, dependency-free HTTP(S) URL validator for browser and Node.
 
 ## Overview
@@ -73,7 +75,7 @@ for (const u of urls) {
 ---
 
 ## 🛠 Development
-This module is standalone. You can copy `email.js` into your own project.  
+This module is standalone. You can copy `url.js` into your own project.  
 No `npm install` or build step required.
 
 ---
