@@ -74,6 +74,11 @@ for (const u of urls) {
 
 ---
 
+## 🧪 Browser test
+Clone the repo, open `url-test.html` — interactive test in your browser.
+
+---
+
 ## 🛠 Development
 This module is standalone. You can copy `url.js` into your own project.  
 No `npm install` or build step required.
