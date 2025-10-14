@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script type="module">
+import { isUrlSafe } from './url.js';
+
+const urls = [
+  'https://example.com',
+  'http://sub.domain.org/path?x=1',
+  'ftp://server.com',
+  'javascript:alert(1)',
+  'data:text/plain,hi',
+  'https://good.com/<bad>'
+];
+
+for (const u of urls) {
+  console.log(u, '=>', isUrlSafe(u));
+}
+</script>
+</body>
+</html>
