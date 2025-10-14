@@ -16,7 +16,7 @@ normalizeEmail('  Example@Domain.COM ');
 
 isEmail('user.name+tag@example.co');
 // → true
-
+```
 
 ### 4. `LICENSE`
 Same MIT text used before (replace with your name/year).
