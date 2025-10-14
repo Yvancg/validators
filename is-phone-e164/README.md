@@ -12,6 +12,7 @@ Most phone validation libraries are heavy or depend on outdated regex sets.
 Install (optional):
 ```bash
 npm i phone-e164
+```
 
 Or copy phone.js directly into your project.
 
