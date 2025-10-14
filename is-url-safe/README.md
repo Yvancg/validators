@@ -1,44 +1,74 @@
-# is-url-safe
+Strict, dependency-free HTTP(S) URL validator for browser and Node.
 
-**Lightweight RFC-like email validator and normalizer.**  
-No dependencies. Zero runtime risk from `eval` or regex DoS. MIT licensed.
+## Overview
 
----
+`is-url-safe` rejects non-HTTP schemes like `javascript:`, `data:`, and `mailto:`.
+It performs structural validation using the built-in `URL` constructor, then enforces
+a restricted protocol and a clean ASCII hostname.
 
-## 🚀 Why
-[`validator.js`](https://www.npmjs.com/package/validator) is large and has had multiple vulnerabilities.  
-`is-email-safe` is 100 lines of auditable JS — simple, strict, and secure.
+This helper is designed for client-side form validation, link sanitization, and
+lightweight content moderation.
 
----
+## Features
 
-## 📦 Usage
+- ✅ Only `http` and `https` schemes allowed
+- 🚫 Blocks `javascript:`, `data:`, `file:`, `ftp:`, and similar schemes
+- ✅ Verifies hostname presence and rejects invalid characters (`<`, `>`, space)
+- ✅ Browser and Node.js compatible
+- ✅ No dependencies
+- 🪶 <1 KB
+
+## Usage
+
 ```js
-import { isEmail, normalizeEmail } from './email.js';
+import { isUrlSafe, normalizeUrl } from './url.js';
 
-normalizeEmail('  Example@Domain.COM ');
-// → "example@domain.com"
+isUrlSafe('https://example.com');         // true
+isUrlSafe('javascript:alert(1)');         // false
+isUrlSafe('ftp://server.com');            // false
+isUrlSafe('https://good.com/<bad>');      // false
 
-isEmail('user.name+tag@example.co');
-// → true
-
-isEmail('user@@domain');
-// → false
+normalizeUrl('https://example.com/path?q=1');
+// -> 'https://example.com/path?q=1'
 ```
 
----
+## API
 
-## 🧩 Validation rules
-- Total length ≤ 254  
-- Local part ≤ 64  
-- ASCII-only (no UTF-8 emoji or accents)  
-- No consecutive dots or leading/trailing dots  
-- Domain has ≥ 2 labels  
-- TLD = letters only, 2–63 chars  
+### `isUrlSafe(raw: string): boolean`
 
----
+Returns `true` only if the given string is a valid `http(s)` URL with a
+non-empty hostname and without control characters.
 
-## 🧪 Browser test
-Clone the repo, open `test.html` — interactive test in your browser.
+### `normalizeUrl(raw: string): string`
+
+Returns a normalized absolute URL (protocol, hostname, path, query, hash).
+Returns an empty string if invalid.
+
+## Example (test.html)
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+<script type="module">
+import { isUrlSafe } from './url.js';
+
+const urls = [
+  'https://example.com',
+  'http://sub.domain.org/path?x=1',
+  'ftp://server.com',
+  'javascript:alert(1)',
+  'data:text/plain,hi',
+  'https://good.com/<bad>'
+];
+
+for (const u of urls) {
+  console.log(u, '=>', isUrlSafe(u));
+}
+</script>
+</body>
+</html>
+```
 
 ---
 
