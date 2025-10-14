@@ -1,4 +1,4 @@
-# phone-e164
+# -s-phone-e164
 
 **Tiny, dependency-free E.164 phone validator and normalizer.**  
 Lightweight, auditable, and safe to embed directly in web or backend code.
@@ -9,12 +9,6 @@ Lightweight, auditable, and safe to embed directly in web or backend code.
 Most phone validation libraries are heavy or depend on outdated regex sets.  
 `phone-e164` is a single file — zero dependencies, zero runtime risk.
 
-Install (optional):
-```bash
-npm i phone-e164
-```
-
-Or copy phone.js directly into your project.
 
 ## 📦 Usage
 ```bash
@@ -36,12 +30,12 @@ validatePhone('415-555-0123'); // true (normalizes to +4155550123)
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `test.html` — interactive test in your browser.
+Clone the repo, open `phone-test.html` — interactive test in your browser.
 
 ---
 
 ## 🛠 Development
-This module is standalone. You can copy `email.js` into your own project.  
+This module is standalone. You can copy `phone.js` into your own project.  
 No `npm install` or build step required.
 
 ---
