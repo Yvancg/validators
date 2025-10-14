@@ -16,3 +16,13 @@ normalizeEmail('  Example@Domain.COM ');
 
 isEmail('user.name+tag@example.co');
 // → true
+
+
+### 4. `LICENSE`
+Same MIT text used before (replace with your name/year).
+
+### 5. `.github/FUNDING.yml`
+```yaml
+github: yvancg
+buy_me_a_coffee: yconsulting
+custom: ["https://your-custom-link"]
