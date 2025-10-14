@@ -38,7 +38,7 @@ isEmail('user@@domain');
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `test.html` — interactive test in your browser.
+Clone the repo, open `email-test.html` — interactive test in your browser.
 
 ---
 
