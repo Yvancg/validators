@@ -4,9 +4,14 @@
 // Generated: 2025-10-15
 // To update: download the latest registry, rebuild the JSON with the parser, and replace iban_registry_full.json.
 
-import ibanRegistry from "./iban_registry_full.json" assert { type: "json" };
-
-const REG = ibanRegistry;
+let REG;
+try {
+  const mod = await import("./iban_registry_full.json", { assert: { type: "json" } });
+  REG = mod.default;
+} catch {
+  const resp = await fetch(new URL("./iban_registry_full.json", import.meta.url));
+  REG = await resp.json();
+}
 const COUNTRY_LENGTHS = REG.maps.iban_length_by_code || {};
 const BBAN_MAP = REG.maps.bban_by_code || {};
 
