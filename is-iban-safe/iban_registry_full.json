@@ -741,7 +741,7 @@
       "iban_length": 15,
       "iban_structure": "NO2!n4!n6!n1!n",
       "bban_length": 11,
-      "bban_structure": "NO4!n6!n1!n",
+      "bban_structure": "4!n6!n1!n",
       "effective_date": "Apr-07",
       "sepa": true,
       "iban_electronic_example": "NO9386011117947",
