@@ -13,15 +13,15 @@ Most IBAN libraries depend on legacy regex sets or outdated country lists.
 
 ## 📦 Usage
 ```bash
-import { isIbanSafe } from './is-iban-valid/iban.js';
+import { isIbanValid } from './is-iban-valid/iban.js';
 
-isIbanSafe('DE44500105175407324931');
+isIbanValid('DE44500105175407324931');
 // → { ok: true, normalized: 'DE44500105175407324931', issues: [] }
 
-isIbanSafe('DE00500105175407324931');
+isIbanValid('DE00500105175407324931');
 // → { ok: false, issues: ['checksum_failed'] }
 
-isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
+isIbanValid('IR062960000000100324200001', { blockCountries: ['IR'] });
 // → { ok: false, issues: ['country_blocked'] }
 ```
 
