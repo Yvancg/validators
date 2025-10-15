@@ -9,7 +9,7 @@ A collection of minimal, dependency-free, security-focused input validation help
 Available modules:
 
 - **is-email-safe** — Strict RFC-like ASCII email validation, no external dependencies.
-- **is-iban-valid** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.
+- **is-iban-safe** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.
 - **is-phone-e164** — E.164 international phone number validator with normalization.
 - **is-url-safe** — Conservative `http(s)`-only URL validator resistant to bypass attacks.
 
@@ -51,7 +51,7 @@ validators/
   ├─ LICENSE
   ├─ README.md
   ├─ is-email-safe/
-  ├─ is-iban-valid/
+  ├─ is-iban-safe/
   ├─ is-phone-e164/
   └─ is-url-safe/
 ```
