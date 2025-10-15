@@ -14,7 +14,9 @@ try {
 }
 const COUNTRY_LENGTHS = REG.maps.iban_length_by_code || {};
 const BBAN_MAP = REG.maps.bban_by_code || {};
-
+if (!REG || !REG.maps || !REG.maps.iban_length_by_code) {
+  throw new Error("IBAN registry failed to load. Check iban_registry_full.json path and hosting.");
+}
 export function isIbanSafe(input, opts = {}) {
   const o = Object.assign(
     {
