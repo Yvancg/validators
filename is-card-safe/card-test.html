@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Credit Card Validator — is-card-safe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --fg:#0b0b0c; --bg:#f8fafc; --border:#e5e7eb; --muted:#6b7280; --ok:#0b8a27; --bad:#b00020; }
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0; background:var(--bg); color:var(--fg); }
+    header { padding:18px 20px; background:#fff; border-bottom:1px solid var(--border); }
+    main { max-width:900px; margin:24px auto; padding:0 16px 48px; }
+    h1 { margin:0; font-size:20px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:16px; }
+    input, textarea { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:10px; font-size:14px; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .btn { padding:10px 14px; border:1px solid var(--border); background:#111827; color:#fff; border-radius:10px; cursor:pointer; font-size:14px; }
+    .btn.alt { background:#fff; color:#111827; }
+    .pill { font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid var(--border); }
+    .ok { color:var(--ok); }
+    .bad { color:var(--bad); }
+    .chips { display:flex; gap:6px; flex-wrap:wrap; }
+    .chip { padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:12px; }
+    ul { margin:6px 0 0 18px; padding:0; }
+    code { background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+    footer { margin-top:32px; font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Credit Card Validator — <code>is-card-safe/card.js</code></h1>
+  </header>
+  <main>
+    <div class="card">
+      <label for="card">Card Number</label>
+      <input id="card" type="text" placeholder="Enter a test card number" value="4111 1111 1111 1111">
+      <div class="controls">
+        <button id="btn-validate" class="btn">Validate</button>
+        <button id="btn-clear" class="btn alt">Clear</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Samples</label>
+      <div id="examples" class="chips"></div>
+    </div>
+
+    <div class="card">
+      <label>Result</label>
+      <div id="result">Run a validation.</div>
+    </div>
+
+    <footer>
+      Generated: <span id="today"></span> — Compatible with <code>is-card-safe/card.js</code>
+    </footer>
+  </main>
+
+  <script type="module">
+    import { validateCard } from './is-card-safe/card.js';
+
+    const $ = id => document.getElementById(id);
+    $('today').textContent = new Date().toISOString().slice(0,10);
+
+    const EXAMPLES = {
+      'Visa': '4111111111111111',
+      'Mastercard': '5555555555554444',
+      'Amex': '378282246310005',
+      'Discover': '6011111111111117',
+      'JCB': '3566002020360505',
+      'Diners': '30569309025904',
+      'UnionPay': '6221260000000000',
+      'Maestro': '6759649826438453',
+      'MIR': '2200123456789010'
+    };
+
+    const exWrap = $('examples');
+    for (const [brand, num] of Object.entries(EXAMPLES)) {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = brand;
+      b.addEventListener('click', () => {
+        $('card').value = num;
+        run();
+      });
+      exWrap.appendChild(b);
+    }
+
+    $('btn-validate').addEventListener('click', run);
+    $('btn-clear').addEventListener('click', () => {
+      $('card').value = '';
+      $('result').innerHTML = 'Cleared.';
+    });
+
+    function run() {
+      const input = $('card').value;
+      const res = validateCard(input);
+      const ok = res.ok;
+      const color = ok ? 'ok' : 'bad';
+      $('result').innerHTML = `
+        <div><span class="pill ${color}">${ok ? 'VALID' : 'INVALID'}</span></div>
+        <p><strong>Brand:</strong> ${res.brand ?? '—'}</p>
+        <p><strong>Normalized:</strong> <code>${res.normalized ?? '—'}</code></p>
+        <p><strong>Last 4:</strong> ${res.last4 ?? '—'}</p>
+        <p><strong>Issues:</strong></p>
+        <ul>${res.issues.length ? res.issues.map(i => `<li>${i}</li>`).join('') : '<li>none</li>'}</ul>
+      `;
+    }
+
+    run();
+  </script>
+</body>
+</html>
