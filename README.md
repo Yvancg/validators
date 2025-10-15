@@ -32,12 +32,12 @@ Each module has its own `README.md`, tests, and can be imported individually.
 
 ```js
 import { isEmailSafe } from './is-email-safe/email.js';
-import { isIbanValid } from './is-iban-valid/iban.js';
+import { isIbanSafe } from './is-iban-valid/iban.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
 
 console.log(isEmailSafe('user@example.com'));     // true
-console.log(isIbanValid('DE44500105175407324931')) // { ok: true, ... }
+console.log(isIbanSafe('DE44500105175407324931')) // { ok: true, ... }
 console.log(isPhoneE164('+12025550123'));         // true
 console.log(isUrlSafe('https://example.com'));    // true
 ```
