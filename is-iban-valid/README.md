@@ -46,6 +46,12 @@ Clone the repo, open `iban-test.html` — interactive test in your browser.
 This module is standalone. You can copy `iban.js` and `iban_registry_full.json` into your own project.  
 No `npm install` or build step required.
 
+To refresh the registry:
+	1.	Download the latest SWIFT IBAN Registry from
+https://www.swift.com/swift-resource/11971/download
+	2.	Run the parser script to rebuild `iban_registry_full.json`
+	3.	Verify all examples pass Mod-97 and length checks
+
 ---
 
 ## 🪪 License
