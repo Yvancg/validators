@@ -32,7 +32,7 @@ Each module has its own `README.md`, tests, and can be imported individually.
 
 ```js
 import { isEmailSafe } from './is-email-safe/email.js';
-import { isIbanSafe } from './is-iban-valid/iban.js';
+import { isIbanSafe } from './is-iban-safe/iban.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
 
