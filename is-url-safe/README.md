@@ -76,7 +76,7 @@ for (const u of urls) {
 
 ## 🧪 Browser test
 Clone the repo, open `url-test.html` — interactive test in your browser
-or click 👉🏻 [URL Validator Test](./url-test.html)
+or click 👉🏻 [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 
 ---
 
