@@ -1,41 +1,49 @@
-# -s-phone-e164
+# is-iban-valid
 
-**Tiny, dependency-free E.164 phone validator and normalizer.**  
-Lightweight, auditable, and safe to embed directly in web or backend code.
+**Tiny, dependency-free IBAN validator and normalizer (ISO 13616 + ISO 7064).**  
+Lightweight, auditable, and backed by the official SWIFT IBAN Registry.
 
 ---
 
 ## 🚀 Why
-Most phone validation libraries are heavy or depend on outdated regex sets.  
-`phone-e164` is a single file — zero dependencies, zero runtime risk.
+Most IBAN libraries depend on legacy regex sets or outdated country lists.  
+`is-iban-valid` is a single-file validator that loads an up-to-date registry snapshot from SWIFT and verifies every rule natively — checksum, country length, and BBAN structure.
 
+---
 
 ## 📦 Usage
 ```bash
-normalizePhone(' (415) 555-0123 '); // "+4155550123"
-isE164('+4155550123'); // true
-validatePhone('415-555-0123'); // true (normalizes to +4155550123)
+import { isIbanSafe } from './is-iban-valid/iban.js';
+
+isIbanSafe('DE44500105175407324931');
+// → { ok: true, normalized: 'DE44500105175407324931', issues: [] }
+
+isIbanSafe('DE00500105175407324931');
+// → { ok: false, issues: ['checksum_failed'] }
+
+isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
+// → { ok: false, issues: ['country_blocked'] }
 ```
 
 ---
 
 ## 🧩 Validation rules
-- Total length ≤ 254  
-- Local part ≤ 64  
-- ASCII-only (no UTF-8 emoji or accents)  
-- No consecutive dots or leading/trailing dots  
-- Domain has ≥ 2 labels  
-- TLD = letters only, 2–63 chars  
+-	Country must exist in the SWIFT IBAN Registry
+-	Total length matches registry entry
+- Check digits pass ISO 7064 Mod-97 checksum
+- Structure follows country-specific BBAN pattern
+- Optional allowlist / blocklist filters by country code
+- Optional strict casing (reject lowercase input)
 
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `phone-test.html` — interactive test in your browser.
+Clone the repo, open `iban-test.html` — interactive test in your browser.
 
 ---
 
 ## 🛠 Development
-This module is standalone. You can copy `phone.js` into your own project.  
+This module is standalone. You can copy `iban.js` and `iban_registry_full.json` into your own project.  
 No `npm install` or build step required.
 
 ---
