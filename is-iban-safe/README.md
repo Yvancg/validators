@@ -38,7 +38,7 @@ isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `iban-test.html` — interactive test in your browser.
+Clone the repo, open `iban-test.html` — interactive test in your browser 
 or click 👉🏻 [IBAN Validator Test](./iban-test.html)
 
 ---
