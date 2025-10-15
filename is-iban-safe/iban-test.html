@@ -101,42 +101,35 @@
   </main>
 
 <script type="module">
-	const $ = id => document.getElementById(id);
+  const $ = id => document.getElementById(id);
   const show = msg => { const el = $('result'); if (el) el.innerHTML = msg; };
-  
-  // 1) Try both possible paths
-  const jsonPaths = ['./iban_registry_full.json', './is-iban-valid/iban_registry_full.json'];
-  
-  for (const p of jsonPaths) {
-    try {
-      const r = await fetch(new URL(p, import.meta.url));
-      show(`Fetching ${p} → status ${r.status}, type ${r.headers.get('content-type')}`);
-      if (r.ok) {
-        const j = await r.json();
-        // basic structure checks
-        if (!j?.maps?.iban_length_by_code) { show(`Loaded ${p} but maps.iban_length_by_code missing`); }
-        else {
-          const de = j.maps.iban_length_by_code.DE;
-          show(`Loaded ${p} OK. DE length=${de}`);
-          break; // found the right path
-        }
-      }
-    } catch (e) {
-      show(`Error fetching ${p}: ${e.message}`);
-    }
+
+  // --- Import validator ---
+  let isIbanSafe;
+  try {
+    ({ isIbanSafe } = await import('./iban.js'));
+  } catch (e) {
+    show(`<pre>Import failed:\n${e?.message || e}</pre>`);
   }
 
-  // date stamp
-  $('today').textContent = new Date().toISOString().slice(0,10);
+  // --- Check JSON availability ---
+  const p = './iban_registry_full.json';
+  try {
+    const r = await fetch(new URL(p, import.meta.url));
+    console.log(`Fetching ${p} → ${r.status}, ${r.headers.get('content-type')}`);
+    if (!r.ok) console.warn(`Fetch failed for ${p}`);
+  } catch (e) {
+    console.error(`Error fetching ${p}:`, e);
+  }
 
-  // Always bind buttons so Clear works even if import fails
-  $('btn-validate').addEventListener('click', () => run());
+  // --- UI setup ---
+  $('today').textContent = new Date().toISOString().slice(0,10);
   $('btn-clear').addEventListener('click', () => {
     $('iban').value = '';
     show('Cleared.');
   });
+  $('btn-validate').addEventListener('click', run);
 
-  // Example chips
   const EXAMPLES = [
     "DE44500105175407324931","GB29NWBK60161331926819","FR1420041010050500013M02606",
     "NL91ABNA0417164300","ES9121000418450200051332","IT60X0542811101000000123456",
@@ -148,28 +141,16 @@
     const b = document.createElement('button');
     b.className = 'chip';
     b.textContent = v;
-    b.addEventListener('click', () => { $('iban').value = v; });
+    b.addEventListener('click', () => $('iban').value = v);
     exWrap.appendChild(b);
   });
-
-  // Robust import: try local path then subfolder path
-  let isIbanSafe;
-  try {
-    ({ isIbanSafe } = await import('./iban.js'));
-  } catch {
-    try {
-      ({ isIbanSafe } = await import('./is-iban-valid/iban.js'));
-    } catch (e) {
-      show(`<pre>Import failed:\n${e?.message || e}</pre>`);
-    }
-  }
 
   function parseCSV(s) {
     return (s || '').split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
   }
 
   async function run() {
-    if (!isIbanSafe) return; // import failed, message already shown
+    if (!isIbanSafe) return;
     const opts = {
       strictStructure: $('opt-structure').checked,
       strictCase: $('opt-case').checked
@@ -197,7 +178,6 @@
       </div>
     `);
   }
-
 </script>
 </body>
 </html>
