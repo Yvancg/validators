@@ -50,7 +50,7 @@ import { isIbanSafe } from './is-iban-safe/iban.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
 
-console.log(validateCard('4111111111111111'));     // { ok: true, brand: 'visa', ... }
+console.log(validateCard('4111111111111111'));    // { ok: true, brand: 'visa', ... }
 console.log(isEmailSafe('user@example.com'));     // true
 console.log(isIbanSafe('DE44500105175407324931')) // { ok: true, ... }
 console.log(isPhoneE164('+12025550123'));         // true
