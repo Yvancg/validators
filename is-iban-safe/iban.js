@@ -4,25 +4,24 @@
 // Generated: 2025-10-15
 // To update: download the latest registry, rebuild the JSON with the parser, and replace iban_registry_full.json.
 
-let REG;
-try {
-  const mod = await import("./iban_registry_full.json", { assert: { type: "json" } });
-  REG = mod.default;
-} catch {
-  const resp = await fetch(new URL("./iban_registry_full.json", import.meta.url));
-  REG = await resp.json();
+let REG, COUNTRY_LENGTHS, BBAN_MAP;
+
+async function loadRegistry() {
+  if (REG) return;
+  try {
+    const mod = await import("./iban_registry_full.json", { assert: { type: "json" } });
+    REG = mod.default;
+  } catch {
+    const resp = await fetch(new URL("./iban_registry_full.json", import.meta.url));
+    REG = await resp.json();
+  }
+  if (!REG?.maps?.iban_length_by_code) throw new Error("IBAN registry failed to load");
+  COUNTRY_LENGTHS = REG.maps.iban_length_by_code || {};
+  BBAN_MAP = REG.maps.bban_by_code || {};
 }
 
-// ✅ guard first
-if (!REG || !REG.maps || !REG.maps.iban_length_by_code) {
-  throw new Error("IBAN registry failed to load. Check is-iban-valid/iban_registry_full.json path.");
-}
-
-// now it’s safe to read maps
-const COUNTRY_LENGTHS = REG.maps.iban_length_by_code || {};
-const BBAN_MAP = REG.maps.bban_by_code || {};
-
-export function isIbanSafe(input, opts = {}) {
+export async function isIbanSafe(input, opts = {}) {
+  await loadRegistry();            // <-- ensure JSON is loaded here
   const o = Object.assign(
     {
       allowCountries: undefined,
