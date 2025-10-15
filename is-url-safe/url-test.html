@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
-<body>
-<pre id="out">running…</pre>
-<script type="module">
-  // show import errors in-page
-  window.addEventListener('error', e => {
-    document.getElementById('out').textContent =
-      (e?.error?.stack || e.message || String(e));
-  });
-
-  import { isUrlSafe } from './url.js';
-
-  const urls = [
-    'https://example.com',
-    'http://sub.domain.org/path?x=1',
-    'ftp://server.com',
-    'javascript:alert(1)',
-    'data:text/plain,hi',
-    'https://good.com/<bad>'
-  ];
-
-  const out = document.getElementById('out');
-  out.textContent = urls.map(u => `${u} => ${JSON.stringify(isUrlSafe(u))}`).join('\n');
-</script>
-</body>
+  <body>
+    <script type="module">
+      import { isUrlSafe } from './url.js';
+      
+      const urls = [
+        'https://example.com',
+        'http://sub.domain.org/path?x=1',
+        'ftp://server.com',
+        'javascript:alert(1)',
+        'data:text/plain,hi',
+        'https://good.com/<bad>'
+      ];
+      
+      for (const u of urls) {
+        console.log(u, '=>', isUrlSafe(u));
+      }
+    </script>
+  </body>
 </html>
