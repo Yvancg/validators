@@ -75,7 +75,8 @@ for (const u of urls) {
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `url-test.html` — interactive test in your browser.
+Clone the repo, open `url-test.html` — interactive test in your browser
+or click 👉🏻 [URL Validator Test](./url-test.html)
 
 ---
 
