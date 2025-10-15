@@ -148,7 +148,7 @@
     const b = document.createElement('button');
     b.className = 'chip';
     b.textContent = v;
-    b.addEventListener('click', () => { $('iban').value = v; run(); });
+    b.addEventListener('click', () => { $('iban').value = v; });
     exWrap.appendChild(b);
   });
 
@@ -198,8 +198,6 @@
     `);
   }
 
-  // first render
-  run();
 </script>
 </body>
 </html>
