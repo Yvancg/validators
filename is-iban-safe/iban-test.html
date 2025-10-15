@@ -115,8 +115,8 @@
   // --- Check JSON availability ---
   const p = './iban_registry_full.json';
   try {
-    const r = await fetch(new URL(p, import.meta.url));
-    console.log(`Fetching ${p} → ${r.status}, ${r.headers.get('content-type')}`);
+    const r = await fetch('./iban_registry_full.json');
+    console.log(`Fetched ${p} → ${r.status}, ${r.headers.get('content-type')}`);
     if (!r.ok) console.warn(`Fetch failed for ${p}`);
   } catch (e) {
     console.error(`Error fetching ${p}:`, e);
