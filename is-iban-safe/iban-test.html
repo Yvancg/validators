@@ -101,6 +101,10 @@
   </main>
 
   <script type="module">
+    window.addEventListener('error', e => {
+      const el = document.getElementById('result');
+      if (el) el.innerHTML = `<pre>${e?.error?.stack || e.message}</pre>`;
+    });
     import { isIbanSafe } from './iban.js';
 
     const $ = (id) => document.getElementById(id);
