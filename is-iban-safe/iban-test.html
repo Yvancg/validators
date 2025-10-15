@@ -101,8 +101,30 @@
   </main>
 
 <script type="module">
-  const $ = id => document.getElementById(id);
+	const $ = id => document.getElementById(id);
   const show = msg => { const el = $('result'); if (el) el.innerHTML = msg; };
+  
+  // 1) Try both possible paths
+  const jsonPaths = ['./iban_registry_full.json', './is-iban-valid/iban_registry_full.json'];
+  
+  for (const p of jsonPaths) {
+    try {
+      const r = await fetch(new URL(p, import.meta.url));
+      show(`Fetching ${p} → status ${r.status}, type ${r.headers.get('content-type')}`);
+      if (r.ok) {
+        const j = await r.json();
+        // basic structure checks
+        if (!j?.maps?.iban_length_by_code) { show(`Loaded ${p} but maps.iban_length_by_code missing`); }
+        else {
+          const de = j.maps.iban_length_by_code.DE;
+          show(`Loaded ${p} OK. DE length=${de}`);
+          break; // found the right path
+        }
+      }
+    } catch (e) {
+      show(`Error fetching ${p}: ${e.message}`);
+    }
+  }
 
   // date stamp
   $('today').textContent = new Date().toISOString().slice(0,10);
