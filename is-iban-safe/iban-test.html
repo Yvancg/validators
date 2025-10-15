@@ -168,7 +168,7 @@
     return (s || '').split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
   }
 
-  function run() {
+  async function run() {
     if (!isIbanSafe) return; // import failed, message already shown
     const opts = {
       strictStructure: $('opt-structure').checked,
@@ -179,7 +179,7 @@
     if (allow.length) opts.allowCountries = allow;
     if (block.length) opts.blockCountries = block;
 
-    const res = isIbanSafe($('iban').value, opts);
+    const res = await isIbanSafe($('iban').value, opts);
     const ok = res.ok === true;
     const badge = ok ? `<span class="pill ok">valid</span>` : `<span class="pill bad">invalid</span>`;
     const issues = (res.issues || []).map(i => `<li>${i}</li>`).join('') || '<li>none</li>';
