@@ -1,4 +1,4 @@
-# is-iban-valid
+# is-iban-safe
 
 **Tiny, dependency-free IBAN validator and normalizer (ISO 13616 + ISO 7064).**  
 Lightweight, auditable, and backed by the official SWIFT IBAN Registry.
@@ -13,7 +13,7 @@ Most IBAN libraries depend on legacy regex sets or outdated country lists.
 
 ## 📦 Usage
 ```bash
-import { isIbanSafe } from './is-iban-valid/iban.js';
+import { isIbanSafe } from './is-iban-safe/iban.js';
 
 isIbanSafe('DE44500105175407324931');
 // → { ok: true, normalized: 'DE44500105175407324931', issues: [] }
