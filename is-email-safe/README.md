@@ -39,7 +39,7 @@ isEmail('user@@domain');
 
 ## 🧪 Browser test
 Clone the repo, open `email-test.html` — interactive test in your browser
-or click 👉🏻 [Email Validator Test](./email-test.html)
+or click 👉🏻 [Email Validator Test](https://yvancg.github.io/validators/is-email-safe/email-test.html)
 
 ---
 
