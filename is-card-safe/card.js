@@ -26,6 +26,21 @@ export function validateCard(input, opts = {}) {
   const brand = detectBrand(digits);
   if (!brand) issues.push('unknown_brand');
 
+  const BRAND_LENGTHS = {
+    visa: [13,16,19],
+    mastercard: [16],
+    amex: [15],
+    discover: [16,17,18,19],
+    jcb: [16,17,18,19],
+    diners: [14,15,16],
+    unionpay: [16,17,18,19],
+    maestro: [12,13,14,15,16,17,18,19],
+    mir: [16,17,18,19],
+  };
+  if (brand && BRAND_LENGTHS[brand] && !BRAND_LENGTHS[brand].includes(digits.length)) {
+    issues.push('length_not_allowed_for_brand');
+  }
+
   if (o.allowBrands && brand && !o.allowBrands.includes(brand)) issues.push('brand_not_allowed');
   if (o.blockBrands && brand && o.blockBrands.includes(brand)) issues.push('brand_blocked');
 
