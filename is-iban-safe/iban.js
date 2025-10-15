@@ -1,9 +1,4 @@
 // iban.js
-// Zero dependencies. Uses SWIFT-derived JSON for IBAN validation (ISO 13616 + ISO 7064).
-// Source: https://www.swift.com/swift-resource/11971/download
-// Generated: 2025-10-15
-// To update: download the latest registry, rebuild the JSON with the parser, and replace iban_registry_full.json.
-
 let REG, COUNTRY_LENGTHS, BBAN_MAP;
 
 async function loadRegistry() {
@@ -12,7 +7,8 @@ async function loadRegistry() {
     const mod = await import("./iban_registry_full.json", { assert: { type: "json" } });
     REG = mod.default;
   } catch {
-    const resp = await fetch(new URL("./iban_registry_full.json", import.meta.url));
+    const resp = await fetch("./iban_registry_full.json");
+    if (!resp.ok) throw new Error(`IBAN registry fetch failed: ${resp.status}`);
     REG = await resp.json();
   }
   if (!REG?.maps?.iban_length_by_code) throw new Error("IBAN registry failed to load");
@@ -21,7 +17,7 @@ async function loadRegistry() {
 }
 
 export async function isIbanSafe(input, opts = {}) {
-  await loadRegistry();            // <-- ensure JSON is loaded here
+  await loadRegistry();
   const o = Object.assign(
     {
       allowCountries: undefined,
@@ -72,7 +68,6 @@ export async function isIbanSafe(input, opts = {}) {
   return { ok, normalized: ok ? normalized : undefined, issues: Array.from(new Set(issues)) };
 }
 
-// Helpers
 function mod97Check(iban) {
   const s = iban.slice(4) + iban.slice(0, 4);
   let rem = 0;
@@ -81,7 +76,7 @@ function mod97Check(iban) {
     if (c >= 48 && c <= 57) {
       rem = (rem * 10 + (c - 48)) % 97;
     } else {
-      const v = String(c - 55); // A->10
+      const v = String(c - 55);
       for (let j = 0; j < v.length; j++) rem = (rem * 10 + (v.charCodeAt(j) - 48)) % 97;
     }
   }
