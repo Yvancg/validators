@@ -100,94 +100,84 @@
     </div>
   </main>
 
-  <script type="module">
-    window.addEventListener('error', e => {
-      const el = document.getElementById('result');
-      if (el) el.innerHTML = `<pre>${e?.error?.stack || e.message}</pre>`;
-    });
-    import { isIbanSafe } from './iban.js';
+<script type="module">
+  const $ = id => document.getElementById(id);
+  const show = msg => { const el = $('result'); if (el) el.innerHTML = msg; };
 
-    const $ = (id) => document.getElementById(id);
-    $('today').textContent = new Date().toISOString().slice(0,10);
+  // date stamp
+  $('today').textContent = new Date().toISOString().slice(0,10);
 
-    const EXAMPLES = [
-      // valid
-      "DE44500105175407324931",
-      "GB29NWBK60161331926819",
-      "FR1420041010050500013M02606",
-      "NL91ABNA0417164300",
-      "ES9121000418450200051332",
-      "IT60X0542811101000000123456",
-      "PL61109010140000071219812874",
-      "AE070331234567890123456",
-      "SA0380000000608010167519",
-      "CH9300762011623852957",
-      // invalid checksum
-      "DE00500105175407324931",
-      // blocked country example
-      "IR062960000000100324200001"
-    ];
+  // Always bind buttons so Clear works even if import fails
+  $('btn-validate').addEventListener('click', () => run());
+  $('btn-clear').addEventListener('click', () => {
+    $('iban').value = '';
+    show('Cleared.');
+  });
 
-    // Render example chips
-    const exWrap = $('examples');
-    EXAMPLES.forEach(v => {
-      const chip = document.createElement('button');
-      chip.className = 'chip';
-      chip.textContent = v;
-      chip.addEventListener('click', () => { $('iban').value = v; run(); });
-      exWrap.appendChild(chip);
-    });
+  // Example chips
+  const EXAMPLES = [
+    "DE44500105175407324931","GB29NWBK60161331926819","FR1420041010050500013M02606",
+    "NL91ABNA0417164300","ES9121000418450200051332","IT60X0542811101000000123456",
+    "PL61109010140000071219812874","AE070331234567890123456","SA0380000000608010167519",
+    "CH9300762011623852957","DE00500105175407324931","IR062960000000100324200001"
+  ];
+  const exWrap = $('examples');
+  EXAMPLES.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.textContent = v;
+    b.addEventListener('click', () => { $('iban').value = v; run(); });
+    exWrap.appendChild(b);
+  });
 
-    $('btn-validate').addEventListener('click', run);
-    $('btn-clear').addEventListener('click', () => {
-      $('iban').value = '';
-      $('result').innerHTML = 'Cleared.';
-    });
-
-    function parseCSV(s) {
-      return (s || '')
-        .split(',')
-        .map(x => x.trim().toUpperCase())
-        .filter(Boolean);
+  // Robust import: try local path then subfolder path
+  let isIbanSafe;
+  try {
+    ({ isIbanSafe } = await import('./iban.js'));
+  } catch {
+    try {
+      ({ isIbanSafe } = await import('./is-iban-valid/iban.js'));
+    } catch (e) {
+      show(`<pre>Import failed:\n${e?.message || e}</pre>`);
     }
+  }
 
-    function run() {
-      const input = $('iban').value;
-      const opts = {
-        strictStructure: $('opt-structure').checked,
-        strictCase: $('opt-case').checked,
-      };
-      const allow = parseCSV($('opt-allow').value);
-      const block = parseCSV($('opt-block').value);
-      if (allow.length) opts.allowCountries = allow;
-      if (block.length) opts.blockCountries = block;
+  function parseCSV(s) {
+    return (s || '').split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
+  }
 
-      const res = isIbanSafe(input, opts);
-      render(res);
-    }
+  function run() {
+    if (!isIbanSafe) return; // import failed, message already shown
+    const opts = {
+      strictStructure: $('opt-structure').checked,
+      strictCase: $('opt-case').checked
+    };
+    const allow = parseCSV($('opt-allow').value);
+    const block = parseCSV($('opt-block').value);
+    if (allow.length) opts.allowCountries = allow;
+    if (block.length) opts.blockCountries = block;
 
-    function render(res) {
-      const el = $('result');
-      const ok = res.ok === true;
-      const badge = ok ? `<span class="pill ok">valid</span>` :
-                         `<span class="pill bad">invalid</span>`;
-      const issues = (res.issues || []).map(i => `<li>${i}</li>`).join('') || '<li>none</li>';
-      el.innerHTML = `
-        <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
-          ${badge}
-          <code>${res.normalized || '—'}</code>
-        </div>
-        <div class="kvs">
-          <strong>ok:</strong> ${String(res.ok)}<br/>
-          <strong>normalized:</strong> ${res.normalized ?? 'null'}<br/>
-          <strong>issues:</strong>
-          <ul class="list">${issues}</ul>
-        </div>
-      `;
-    }
+    const res = isIbanSafe($('iban').value, opts);
+    const ok = res.ok === true;
+    const badge = ok ? `<span class="pill ok">valid</span>` : `<span class="pill bad">invalid</span>`;
+    const issues = (res.issues || []).map(i => `<li>${i}</li>`).join('') || '<li>none</li>';
 
-    // auto-run once
-    run();
-  </script>
+    show(`
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+        ${badge}
+        <code>${res.normalized || '—'}</code>
+      </div>
+      <div class="kvs">
+        <strong>ok:</strong> ${String(res.ok)}<br/>
+        <strong>normalized:</strong> ${res.normalized ?? 'null'}<br/>
+        <strong>issues:</strong>
+        <ul class="list">${issues}</ul>
+      </div>
+    `);
+  }
+
+  // first render
+  run();
+</script>
 </body>
 </html>
