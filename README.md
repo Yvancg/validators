@@ -9,6 +9,7 @@ A collection of minimal, dependency-free, security-focused input validation help
 Available modules:
 
 - **is-email-safe** — Strict RFC-like ASCII email validation, no external dependencies.
+- **is-iban-valid** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.
 - **is-phone-e164** — E.164 international phone number validator with normalization.
 - **is-url-safe** — Conservative `http(s)`-only URL validator resistant to bypass attacks.
 
@@ -30,24 +31,27 @@ Each module has its own `README.md`, tests, and can be imported individually.
 ## Example Usage
 
 ```js
-import { isEmailSafe } from './is-email-safe/email.js'
-import { isPhoneE164 } from './is-phone-e164/phone.js'
-import { isUrlSafe } from './is-url-safe/url.js'
+import { isEmailSafe } from './is-email-safe/email.js';
+import { isIbanValid } from './is-iban-valid/iban.js';
+import { isPhoneE164 } from './is-phone-e164/phone.js';
+import { isUrlSafe } from './is-url-safe/url.js';
 
-console.log(isEmailSafe('user@example.com')) // true
-console.log(isPhoneE164('+12025550123'))     // true
-console.log(isUrlSafe('https://example.com')) // true
+console.log(isEmailSafe('user@example.com'));     // true
+console.log(isIbanValid('DE44500105175407324931')) // { ok: true, ... }
+console.log(isPhoneE164('+12025550123'));         // true
+console.log(isUrlSafe('https://example.com'));    // true
 ```
 
 ## Folder Structure
 
 ```
-safe-validators/
+validators/
   ├─ .github/
   │   └─ FUNDING.yml
   ├─ LICENSE
   ├─ README.md
   ├─ is-email-safe/
+  ├─ is-iban-valid/
   ├─ is-phone-e164/
   └─ is-url-safe/
 ```
