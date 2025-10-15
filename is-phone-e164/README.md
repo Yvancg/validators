@@ -1,4 +1,4 @@
-# -s-phone-e164
+# is-phone-e164
 
 **Tiny, dependency-free E.164 phone validator and normalizer.**  
 Lightweight, auditable, and safe to embed directly in web or backend code.
