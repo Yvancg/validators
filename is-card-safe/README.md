@@ -42,6 +42,8 @@ validateCard('1234 5678 9012 3456');
 Clone the repo, open `card-test.html` — interactive test in your browser
 or click 👉🏻 [Card Validator Test](https://yvancg.github.io/validators/is-card-safe/card-test.html)
 
+You can test Visa, Mastercard, Amex, Discover, JCB, UnionPay, and more directly in here.
+
 ---
 
 ## 🛠 Development
