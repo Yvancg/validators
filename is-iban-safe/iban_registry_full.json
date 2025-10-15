@@ -1,17 +1,3 @@
-/*
-  IBAN Registry JSON
-  Generated: 2025-10-15
-  Source: https://www.swift.com/swift-resource/11971/download
-  Note:
-    This file was created by parsing the official SWIFT IBAN Registry.
-    To recreate or refresh:
-      1. Download the latest registry TXT or PDF from the above SWIFT link.
-      2. Run the extraction script (is-iban-safe parser) to rebuild the JSON.
-      3. Validate output by checking:
-         - IBAN length equals declared.
-         - Example IBAN passes mod-97 checksum.
-         - Structure length matches IBAN length.
-*/
 {
   "source": "SWIFT IBAN Registry (user-supplied text extract)",
   "generated_at": "2025-10-15T09:08:08.985713+00:00Z",
