@@ -20,15 +20,14 @@ All helpers are designed for use in:
 
 Each module has its own `README.md`, tests, and can be imported individually.
 
-## 🔗 Live Test Pages
+## 🔗 Live Demos (GitHub Pages)
 
-If you’re running a local dev server (e.g. `npx serve .` or `python3 -m http.server`),  
-you can open these test pages directly in your browser:
+You can try each validator interactively in your browser:
 
-- [Email Validator Test](./is-email-safe/email-test.html)
-- [Phone Validator Test](./is-phone-e164/phone-test.html)
-- [URL Validator Test](./is-url-safe/url-test.html)
-- [IBAN Validator Test](./is-iban-safe/iban-test.html)
+- [Email Validator Test](https://yvancg.github.io/validators/is-email-safe/email-test.html)
+- [IBAN Validator Test](https://yvancg.github.io/validators/is-iban-safe/iban-test.html)
+- [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
+- [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 
 Each page loads its respective module and allows interactive validation.
 
