@@ -31,7 +31,7 @@ validatePhone('415-555-0123'); // true (normalizes to +4155550123)
 
 ## 🧪 Browser test
 Clone the repo, open `phone-test.html` — interactive test in your browser
-or click 👉🏻 [Phone Validator Test](./phone-test.html)
+or click 👉🏻 [Phone Validator Test]((https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 
 ---
 
