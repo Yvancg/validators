@@ -43,6 +43,7 @@ isJsonSafe('{"__proto__":{}}');
 
 normalizeJson(' { "x": 1, "y": 2 } ');
 // → '{"x":1,"y":2}'
+```
 
 ---
 
