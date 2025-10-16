@@ -28,3 +28,14 @@ export function validateOptionalE164(input) {
   const v = normalizePhone(input);
   return v === '' || isE164(v);
 }
+
+export function validateOptionalE164(input) {
+  const v = normalizePhone(input);
+  return v === '' || isE164(v);
+}
+
+export function isPhoneE164(raw) {
+  return isE164(normalizePhone(String(raw)));
+}
+
+export default isPhoneE164;
