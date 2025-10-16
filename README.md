@@ -1,18 +1,5 @@
 # Validators
 
-[![card ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/card.json)](./bench/card.json)
-[![card gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-card-safe/card.js.json)](./metrics/is-card-safe/card.js.json)
-[![email ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/email.json)](./bench/email.json)
-[![email gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-email-safe/email.js.json)](./metrics/is-email-safe/email.js.json)
-[![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
-[![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-iban-safe/iban.js.json)](./metrics/is-iban-safe/iban.js.json)
-[![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
-[![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-minify/minify.js.json)](./metrics/is-minify/minify.js.json)
-[![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
-[![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-phone-e164/phone.js.json)](./metrics/is-phone-e164/phone.js.json)
-[![url ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/url.json)](./bench/url.json)
-[![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-url-safe/url.js.json)](./metrics/is-url-safe/url.js.json)
-
 A collection of minimal, dependency-free, security-focused input validation helpers for modern web and edge environments.
 
 ## Overview
@@ -22,14 +9,26 @@ A collection of minimal, dependency-free, security-focused input validation help
 Available modules:
 
 - **is-card-safe** — Credit card validator with Luhn check and brand detection (Visa, Mastercard, Amex, etc.).
+  [![card ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/card.json)](./bench/card.json)
+  [![card gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-card-safe/card.js.json)](./metrics/is-card-safe/card.js.json)
 - **is-email-safe** — Strict RFC-like ASCII email validation, no external dependencies.
+  [![email ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/email.json)](./bench/email.json)
+  [![email gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-email-safe/email.js.json)](./metrics/is-email-safe/email.js.json)
 - **is-iban-safe** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.
+  [![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
+  [![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-iban-safe/iban.js.json)](./metrics/is-iban-safe/iban.js.json)
 - **is-minify** — Safe, dependency-free JavaScript and CSS minifier for browser and Node.
   [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
+  [![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
+  [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-minify/minify.js.json)](./metrics/is-minify/minify.js.json)
 - **is-phone-e164** — E.164 international phone number validator with normalization.
   [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
+  [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
+  [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-phone-e164/phone.js.json)](./metrics/is-phone-e164/phone.js.json)
 - **is-url-safe** — Conservative `http(s)`-only URL validator resistant to bypass attacks.
   [![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/url.js.json)](./metrics/url.js.json)
+  [![url ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/url.json)](./bench/url.json)
+  [![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-url-safe/url.js.json)](./metrics/is-url-safe/url.js.json)
 
 All helpers are designed for use in:
 - Browsers (ESM)
