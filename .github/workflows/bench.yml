@@ -1,28 +1,40 @@
-name: bench
+name: update bench metrics
 on:
   push:
-    branches: [main]
+    branches: [ main ]
     paths:
-      - 'is-*/**.js'
-      - 'scripts/bench-changed.mjs'
+      - '**/*.js'
+      - '.github/workflows/bench.yml'
+      - 'scripts/bench.mjs'
   workflow_dispatch:
 
-permissions: { contents: write }
+permissions:
+  contents: write
 
 jobs:
-  run:
+  update-bench:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - name: Run bench for changed files
-        env:
-          BEFORE: ${{ github.event.before }}
-          AFTER:  ${{ github.sha }}
-        run: node scripts/bench-changed.mjs
-      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore(bench): refresh ops/s badges'
-          file_pattern: bench/*.json
+          persist-credentials: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run benchmarks
+        run: node scripts/bench.mjs
+
+      - name: Commit and push bench JSON
+        run: |
+          set -e
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add bench
+          if git diff --cached --quiet; then
+            echo "No bench changes."
+          else
+            git commit -m "chore(bench): refresh ops/s badges"
+            git push
+          fi
