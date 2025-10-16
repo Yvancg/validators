@@ -34,7 +34,6 @@
       <textarea id="src">{"user":{"name":"Ada","roles":["admin","ops"]},"count":3}</textarea>
       <div class="controls">
         <button id="btn-validate" class="btn">Validate</button>
-        <button id="btn-minify" class="btn alt">Minify</button>
         <button id="btn-clear" class="btn alt">Clear</button>
       </div>
     </div>
@@ -82,11 +81,6 @@
 
     // wire buttons
     $('btn-validate').addEventListener('click', run);
-    $('btn-minify').addEventListener('click', () => {
-      const m = normalizeJson($('src').value);
-      if (m) $('src').value = m;
-      run();
-    });
     $('btn-clear').addEventListener('click', () => {
       $('src').value = '';
       $('result').textContent = 'Cleared.';
