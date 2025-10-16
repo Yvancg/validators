@@ -9,6 +9,14 @@ Lightweight, auditable, and safe to embed directly in web or backend code.
 Most phone validation libraries are heavy or depend on outdated regex sets.  
 `phone-e164` is a single file — zero dependencies, zero runtime risk.
 
+## 🌟 Features
+- ✅ Validates and normalizes international phone numbers in E.164 format  
+- ✅ Removes spaces, dashes, parentheses, and other common formatting  
+- ✅ Detects invalid or incomplete country codes  
+- ✅ Works in browsers, Node.js, and edge runtimes  
+- ✅ Zero dependencies — pure ES module  
+- [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
+  [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
 
 ## 📦 Usage
 ```bash
