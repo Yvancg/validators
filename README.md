@@ -29,6 +29,9 @@ Available modules:
 - **is-url-safe** — Conservative `http(s)`-only URL validator resistant to bypass attacks.  
   [![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/url.js.json)](./metrics/url.js.json)
   [![url ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/url.json)](./bench/url.json)
+- **is-us-tin-safe** — Validates U.S. Taxpayer Identification Numbers (EIN, SSN, ITIN).   
+  [![tin gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/tin.js.json)](./metrics/tin.js.json)
+  [![tin ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/tin.json)](./bench/tin.json)
 
 All helpers are designed for use in:
 - Browsers (ESM)
@@ -48,6 +51,7 @@ You can try each validator interactively in your browser:
 - [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
+- [US TIN Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
 
 Each page loads its respective module and allows interactive validation.
 
@@ -69,6 +73,7 @@ import { isJsonSafe } from './is-json-safe/json.js';
 import { minifyJS, minifyCSS } from './is-minify/minify.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
+import { validateUsTin } from './is-us-tin-safe/tin.js';
 
 console.log(validateCard('4111111111111111'));              // { ok: true, brand: 'visa', ... }
 console.log(isEmailSafe('user@example.com'));               // true
@@ -78,6 +83,7 @@ console.log(minifyJS('function x () { return 1 + 2 ; }'));  // 'function x(){ret
 console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}'
 console.log(isPhoneE164('+12025550123'));                   // true
 console.log(isUrlSafe('https://example.com'));              // true
+console.log(validateUsTin('12-3456789'));                   // { ok: true, type: 'ein', ... }
 ```
 
 ## Folder Structure
@@ -94,7 +100,8 @@ validators/
   ├─ is-json-safe/
   ├─ is-minify/
   ├─ is-phone-e164/
-  └─ is-url-safe/
+  ├─ is-url-safe/
+  └─ is-us-tin-safe/
 ```
 
 ## Security Notes
