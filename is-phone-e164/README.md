@@ -1,4 +1,6 @@
 # is-phone-e164
+[![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
+  [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
 
 **Tiny, dependency-free E.164 phone validator and normalizer.**  
 Lightweight, auditable, and safe to embed directly in web or backend code.
@@ -15,8 +17,6 @@ Most phone validation libraries are heavy or depend on outdated regex sets.
 - ✅ Detects invalid or incomplete country codes  
 - ✅ Works in browsers, Node.js, and edge runtimes  
 - ✅ Zero dependencies — pure ES module  
-- [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
-  [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
 
 ## 📦 Usage
 ```bash
