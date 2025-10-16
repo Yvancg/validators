@@ -3,38 +3,63 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '**/*.js'
-  workflow_dispatch:
+      - '**/*.js'            # run when JS changes land on main
+      - '.github/workflows/size.yml'
+  workflow_dispatch:         # allow manual runs
+
+permissions:
+  contents: write            # REQUIRED to push
 
 jobs:
   update-metrics:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
-      - name: Compute gzip sizes for all JS files
+      - name: Compute gzip sizes
         run: |
+          set -euo pipefail
           mkdir -p metrics
-          echo "Scanning submodules for JS files..."
 
-          find . -type f -name "*.js" ! -path "*/node_modules/*" | while read -r f; do
+          # List JS files for visibility
+          echo "JS files to measure:"
+          find . -type f -name "*.js" ! -path "*/node_modules/*" -print
+
+          changed=0
+          while IFS= read -r f; do
             [ "$f" = "./.github/workflows/size.yml" ] && continue
             size=$(gzip -c "$f" | wc -c | awk '{printf "%.2fkB", $1/1024}')
-
-            # Extract base filename (e.g. card.js)
             base=$(basename "$f")
-
-            # Write JSON to metrics/<filename>.json
             out="metrics/${base}.json"
-            mkdir -p "$(dirname "$out")"
-            echo "{\"schemaVersion\":1,\"label\":\"gzip\",\"message\":\"$size\",\"color\":\"blue\"}" > "$out"
 
-            echo "→ $f → $out → $size"
-          done
+            json="{\"schemaVersion\":1,\"label\":\"gzip\",\"message\":\"${size}\",\"color\":\"blue\"}"
 
-      - name: Commit and push updated metrics
+            # Only write if content changed to avoid empty commits
+            if [ ! -f "$out" ] || [ "$json" != "$(cat "$out" 2>/dev/null)" ]; then
+              echo "$json" > "$out"
+              echo "→ $f → $out → $size"
+              changed=1
+            else
+              echo "No change: $out"
+            fi
+          done < <(find . -type f -name "*.js" ! -path "*/node_modules/*")
+
+          if [ "$changed" -eq 0 ]; then
+            echo "No metric changes."
+          fi
+
+      - name: Commit and push
+        if: success()
         run: |
+          set -e
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add metrics
-          git diff --quiet && echo "No changes" || (git commit -m "chore: update gzip size metrics" && git push)
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore: update gzip size metrics"
+            git push
+          fi
