@@ -3,9 +3,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'is-minify/minify.js'
+      - 'is-*/**/*.js'
       - 'bench/**'
       - '.github/workflows/bench.yml'
+
 permissions:
   contents: write
 
@@ -17,10 +18,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Run benchmark
-        run: |
-          node --version
-          node bench/bench.mjs
+      - name: Run benchmarks
+        run: node bench/bench.js
       - name: Commit results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
