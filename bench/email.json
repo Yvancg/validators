@@ -1,1 +1,6 @@
-{"schemaVersion":1,"label":"email ops/s","message":"pending","color":"lightgrey"}
+{
+  "schemaVersion": 1,
+  "label": "isEmailSafe",
+  "message": "1246618 ops/s",
+  "color": "informational"
+}
