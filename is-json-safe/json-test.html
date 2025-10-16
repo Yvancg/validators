@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>JSON Validator — is-json-safe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --fg:#111827; --bg:#f9fafb; --border:#e5e7eb; --ok:#15803d; --bad:#b91c1c; --muted:#6b7280; }
+    body { font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--fg); margin:0; }
+    header { padding:18px 20px; background:#fff; border-bottom:1px solid var(--border); }
+    main { max-width:720px; margin:32px auto; padding:0 16px; }
+    h1 { font-size:20px; margin:0 0 16px 0; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:16px; }
+    textarea { width:100%; min-height:180px; padding:12px 14px; border:1px solid var(--border); border-radius:10px; font-size:14px; resize:vertical; }
+    .controls { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+    .btn { padding:10px 14px; border:1px solid var(--border); border-radius:10px; background:#111827; color:#fff; cursor:pointer; }
+    .btn.alt { background:#fff; color:#111827; }
+    .pill { padding:4px 10px; border-radius:999px; border:1px solid var(--border); font-size:12px; }
+    .ok { color:var(--ok); border-color:var(--ok); }
+    .bad { color:var(--bad); border-color:var(--bad); }
+    pre { margin:8px 0 0 0; background:#f3f4f6; border:1px solid var(--border); border-radius:8px; padding:10px; overflow:auto; }
+    footer { font-size:12px; color:var(--muted); margin-top:24px; }
+    label small { color:var(--muted); font-weight:normal; }
+    input[type=number] { width:130px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JSON Validator — <code>is-json-safe/json.js</code></h1>
+  </header>
+  <main>
+    <div class="card">
+      <label for="src">JSON input</label>
+      <textarea id="src">{"user":{"name":"Ada","roles":["admin","ops"]},"count":3}</textarea>
+      <div class="controls">
+        <button id="btn-validate" class="btn">Validate</button>
+        <button id="btn-minify" class="btn alt">Minify</button>
+        <button id="btn-clear" class="btn alt">Clear</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Options <small>(limits)</small></label>
+      <div class="controls">
+        <input id="opt-bytes" type="number" value="1000000" title="maxBytes" />
+        <input id="opt-depth" type="number" value="32" title="maxDepth" />
+        <input id="opt-keys"  type="number" value="50000" title="maxKeys" />
+        <input id="opt-str"   type="number" value="100000" title="maxStringLength" />
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Result</label>
+      <div id="result" style="margin-top:8px;">Awaiting input.</div>
+      <pre id="details" style="display:none"></pre>
+    </div>
+
+    <div class="card">
+      <label>Examples</label>
+      <div class="controls">
+        <button class="btn alt ex">{"a":{"b":[1,2,3]}}</button>
+        <button class="btn alt ex">{"__proto__":{"pollute":true}}</button>
+        <button class="btn alt ex">{"big":"${"x".repeat(2000)}"}</button>
+        <button class="btn alt ex">{bad json]</button>
+      </div>
+    </div>
+
+    <footer>
+      Generated: <span id="today"></span>
+    </footer>
+  </main>
+
+  <script type="module">
+    window.addEventListener('error', e => {
+      document.getElementById('result').innerHTML = `<pre>${e.error?.stack || e.message}</pre>`;
+    });
+
+    import { isJsonSafe, normalizeJson } from './json.js';
+
+    const $ = id => document.getElementById(id);
+    $('today').textContent = new Date().toISOString().slice(0,10);
+
+    // wire buttons
+    $('btn-validate').addEventListener('click', run);
+    $('btn-minify').addEventListener('click', () => {
+      const m = normalizeJson($('src').value);
+      if (m) $('src').value = m;
+      run();
+    });
+    $('btn-clear').addEventListener('click', () => {
+      $('src').value = '';
+      $('result').textContent = 'Cleared.';
+      $('details').style.display = 'none';
+      $('details').textContent = '';
+    });
+
+    document.querySelectorAll('.ex').forEach(b =>
+      b.addEventListener('click', () => { $('src').value = b.textContent; run(); })
+    );
+
+    function opts() {
+      return {
+        maxBytes: +$('opt-bytes').value || 1_000_000,
+        maxDepth: +$('opt-depth').value || 32,
+        maxKeys:  +$('opt-keys').value  || 50_000,
+        maxStringLength: +$('opt-str').value || 100_000,
+      };
+    }
+
+    function run() {
+      const input = $('src').value;
+      const res = isJsonSafe(input, opts());
+      const badge = res.ok
+        ? `<span class="pill ok">VALID</span>`
+        : `<span class="pill bad">INVALID</span>`;
+
+      $('result').innerHTML =
+        `${badge} &nbsp; bytes=${res.bytes} · depth=${res.depth} · keys=${res.keys} ` +
+        (res.issues.length ? ` · issues: ${res.issues.join(", ")}` : "");
+
+      const details = $('details');
+      details.style.display = 'block';
+      details.textContent = JSON.stringify(res, null, 2);
+    }
+  </script>
+</body>
+</html>
