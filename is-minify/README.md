@@ -1,29 +1,36 @@
 # is-minify
 
-Tiny, dependency-free minifier for JavaScript and CSS.
+[![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
+[![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
+
+**Tiny, dependency-free minifier for JavaScript and CSS.**  
 One file. ESM. Works in browser and Node.
 
-## Overview
+---
 
-is-minify removes comments and unnecessary whitespace.
-It preserves semantics by avoiding risky rewrites.
-	•	JS: keeps strings, template literals, and regex literals intact.
-	•	CSS: strips comments and tightens spaces around tokens.
+## 🚀 Overview
 
-This helper is designed for client-side form validation, link sanitization, and
-lightweight content moderation.
+`is-minify` removes comments and unnecessary whitespace while preserving semantics.  
+It safely handles strings, template literals, and regex literals in JS, and preserves CSS structure.
 
-## Features
+- 🟢 JS: Keeps strings, template literals, and regex literals intact  
+- 🟣 CSS: Strips comments and tightens spaces around tokens  
 
-- ✅ JS and CSS modes in one module
-- ✅ Safe comment stripping and whitespace collapse
-- ✅ No AST, no build step, no dependencies
-- ✅ Browser and Node compatible
-- [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
+---
 
-## Usage
+## 🌟 Features
 
-``` js
+- ✅ JS and CSS modes in one module  
+- ✅ Safe comment stripping and whitespace collapse  
+- ✅ No AST, no build step, no dependencies  
+- ✅ Works in browser, Node.js, and edge runtimes  
+- ✅ <1 KB gzipped
+
+---
+
+## 📦 Usage
+
+```js
 import { minify, minifyJS, minifyCSS } from './minify.js';
 
 // JavaScript
@@ -50,23 +57,27 @@ console.log(minify(js, 'js'));
 console.log(minify(css, 'css'));
 ```
 
-## API
+---
 
-### minify(source: string, kind: 'js' | 'css'): string
+## 🧠 API
+
+### `minify(source: string, kind: 'js' | 'css'): string`
 
 Unified entry. Routes to the right minifier.
 
-### minifyJS(source: string): string
+### `minifyJS(source: string): string`
 
-Conservative JS minifier.
-Handles // and /*...*/ comments, strings, template literals, and regex literals.
+Conservative JS minifier.  
+Handles `//` and `/*...*/` comments, strings, template literals, and regex literals.
 
-### minifyCSS(source: string): string
+### `minifyCSS(source: string): string`
 
-Conservative CSS minifier.
-Strips /*...*/ comments, collapses whitespace, tightens : ; { } , > + ~ =.
+Conservative CSS minifier.  
+Strips `/*...*/` comments, collapses whitespace, and tightens `: ; { } , > + ~ =`.
 
-## Example (test.html)
+---
+
+## 🧪 Example (test.html)
 
 ```html
 <!doctype html>
@@ -86,16 +97,19 @@ Strips /*...*/ comments, collapses whitespace, tightens : ; { } , > + ~ =.
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `minify-test.html` — interactive test in your browser
+
+Clone the repo, open `minify-test.html` — interactive test in your browser  
 or click 👉🏻 [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
 
 ---
 
 ## 🛠 Development
+
 This module is standalone. You can copy `minify.js` into your own project.  
 No `npm install` or build step required.
 
-Node one-liners:
+### Node one-liners
+
 ```bash
 node is-minify/minify.js js < app.js > app.min.js
 node is-minify/minify.js css < styles.css > styles.min.css
@@ -104,6 +118,7 @@ node is-minify/minify.js css < styles.css > styles.min.css
 ---
 
 ## 🪪 License
+
 MIT License  
 
 Copyright (c) 2025 **Y Consulting LLC**
@@ -133,9 +148,11 @@ THE SOFTWARE.
 If this library helped you, consider sponsoring its maintenance.
 
 ### GitHub Sponsors
+
 [👉 Sponsor me on GitHub](https://github.com/sponsors/yvancg)
 
 ### Buy Me a Coffee
+
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
 ### Custom link
