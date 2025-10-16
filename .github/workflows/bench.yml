@@ -12,28 +12,26 @@ permissions:
   contents: write
 
 jobs:
-  update-bench:
+  bench:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Run benchmarks
-        run: node scripts/bench.mjs
-
-      - name: Commit and push bench JSON
         run: |
-          set -e
+          set -euo pipefail
+          node scripts/bench.mjs
+      - name: Commit and push results
+        run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add bench
+          git add bench/*.json
           if git diff --cached --quiet; then
-            echo "No bench changes."
+            echo "No changes."
           else
             git commit -m "chore(bench): refresh ops/s badges"
             git push
