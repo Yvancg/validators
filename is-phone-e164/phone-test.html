@@ -76,6 +76,16 @@
       b.addEventListener('click', () => { $('phone').value = b.textContent; run(); })
     );
 
+    // Escape HTML entities for safe output
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function run() {
       const raw = $('phone').value;
       const normalized = normalizePhone(raw);
@@ -89,7 +99,7 @@
       $('result').innerHTML = `
         ${badge}
         <div style="margin-top:6px;">
-          <strong>normalized:</strong> ${normalized || '—'}<br/>
+          <strong>normalized:</strong> ${escapeHTML(normalized) || '—'}<br/>
           <strong>strict:</strong> ${String(strictValid)} &nbsp;|&nbsp;
           <strong>optional:</strong> ${String(optionalValid)}
         </div>
