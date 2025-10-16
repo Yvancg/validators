@@ -8,13 +8,13 @@ One file. ESM. Works in browser and Node.
 
 ---
 
-## 🚀 Overview
+## 🚀 Why
 
-`is-minify` removes comments and unnecessary whitespace while preserving semantics.  
-It safely handles strings, template literals, and regex literals in JS, and preserves CSS structure.
-
-- 🟢 JS: Keeps strings, template literals, and regex literals intact  
-- 🟣 CSS: Strips comments and tightens spaces around tokens  
+Most minifiers are over-engineered, depend on heavy parsers, or risk breaking code through unsafe rewrites.
+`is-minify` takes the opposite approach: it’s small, transparent, and deterministic.
+	•	It avoids AST parsing and complex optimizations that can introduce subtle bugs.
+	•	It guarantees that every output can still be parsed by any compliant JS or CSS engine.
+	•	It’s ideal for quick in-browser transformations, form submissions, or server-side sanitization.
 
 ---
 
