@@ -3,68 +3,69 @@
 [![vat gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/vat.js.json)](../metrics/vat.js.json)
 [![vat ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/vat.json)](../bench/vat.json)
 
-**Lightweight, dependency-free credit card validator and brand detector.**  
-Performs Luhn checksum, detects brand (Visa, Mastercard, Amex, etc.), and normalizes safely.
+**Lightweight, dependency-free EU VAT ID validator.**  
+Performs format and prefix validation for all EU member states and select extra jurisdictions (GB, NO, CH).  
+Zero dependencies. No network lookup. No checksum evaluation.
 
 ---
 
 ## 🚀 Why
 
-Most card libraries are heavy or outdated.  
-`is-vat-safe` is a single auditable file that validates format and checksum locally. No network calls. No logging.
+Most VAT validators rely on web services (VIES) or incomplete regex lists.  
+`is-vat-safe` is a self-contained, auditable file that checks VAT prefixes, syntax, and length purely offline.
 
 ---
 
 ## 🌟 Features
 
-- ✅ Luhn (mod-10) checksum  
-- ✅ Brand detection: Visa, Mastercard, Amex, Discover, JCB, Diners, UnionPay, Maestro, MIR  
-- ✅ Normalizes input to digits-only and exposes `last4`  
-- ✅ Optional allow/block brand policies  
-- ✅ Works in browsers, Node.js, and edge runtimes  
-- ✅ Zero dependencies — pure ES module
+- ✅ Validates VAT prefix (country code) and pattern for each EU member state  
+- ✅ Supports `EL` prefix for Greece and `GB` post-Brexit legacy format  
+- ✅ Normalizes input (removes spaces, dots, dashes, and slashes)  
+- ✅ Optional allow/block country filtering  
+- ✅ Browser, Node, and Edge-compatible  
+- ✅ Zero dependencies — pure ES module 
 
 ---
 
 ## 📦 Usage
 
 ```js
-import { validateCard } from './card.js';
+import { isVatSafe } from './vat.js';
 
-validateCard('4111 1111 1111 1111');
-// → { ok: true, normalized: '4111111111111111', brand: 'visa', last4: '1111', issues: [] }
+isVatSafe('DE123456789');
+// → { ok: true, country: 'DE', normalized: 'DE123456789', issues: [] }
 
-validateCard('5555 5555 5555 4444');
-// → { ok: true, normalized: '5555555555554444', brand: 'mastercard', last4: '4444', issues: [] }
+isVatSafe('FRAB123456789');
+// → { ok: true, country: 'FR', normalized: 'FRAB123456789', issues: [] }
 
-validateCard('1234 5678 9012 3456');
-// → { ok: false, brand: 'unknown', issues: ['luhn_failed','unknown_brand'] }
+isVatSafe('GB999999973');
+// → { ok: true, country: 'GB', normalized: 'GB999999973', issues: [] }
 
-validateCard('4111 1111 1111 1111', { allowBrands: ['mastercard'] });
-// → { ok: false, brand: 'visa', issues: ['brand_not_allowed'] }
+isVatSafe('XX12345');
+// → { ok: false, issues: ['country_unsupported'] }
 ```
 
 ---
 
 ## 🧩 Validation rules
 
-- Digits-only after normalization  
-- Length 12–19 digits  
-- Luhn checksum must pass  
-- Brand recognized or reported as `unknown`  
-- Optional `allowBrands` / `blockBrands` policy checks
+- VAT number must start with a valid EU member state prefix (e.g., DE, FR, IT, ES, EL, etc.)
+- Must match each country’s specific structure (digit or alphanumeric pattern)
+- Automatically ignores spaces, dots, and dashes
+- Optional filters via allowed or blocked arrays
+- No external API or checksum required
 
 ---
 
 ## 🧠 API
 
-### `validateCard(raw: string, opts?: ValidateOpts): Result`
+### `isVatSafe(raw: string, opts?: ValidateOpts): Result`
 
 **Options**
 ```ts
 type ValidateOpts = {
-  allowBrands?: string[]; // e.g. ['visa','mastercard']
-  blockBrands?: string[]; // e.g. ['unionpay']
+  allowed?: string[]; // restrict to certain prefixes (e.g. ['DE','FR'])
+  blocked?: string[]; // exclude certain prefixes
 };
 ```
 
@@ -72,11 +73,24 @@ type ValidateOpts = {
 ```ts
 type Result = {
   ok: boolean;
-  brand?: string;         // 'visa' | 'mastercard' | 'amex' | ...
-  normalized?: string;    // digits-only PAN if ok
-  last4?: string;         // last 4 digits if ok
-  issues: string[];       // e.g. ['too_short','luhn_failed','unknown_brand','brand_not_allowed']
+  country?: string;
+  normalized?: string;
+  issues: string[]; // e.g. ['empty','missing_prefix','country_blocked','bad_pattern']
 };
+```
+
+**normalizeVat(raw: string): string**
+Removes spaces, dots, slashes, and dashes, converts to uppercase.
+```js
+normalizeVat(' fr 123 456 789 ');
+// → 'FR123456789'
+```
+
+**detectCountry(raw: string): string**
+Returns the 2-letter country prefix if valid, else an empty string.
+```js
+detectCountry('DE123456789'); // 'DE'
+detectCountry('123456789');   // ''
 ```
 
 ---
@@ -87,16 +101,15 @@ type Result = {
 <!doctype html>
 <html>
   <body>
-    <main>
-      <input id="pan" placeholder="4111 1111 1111 1111" />
-      <button id="btn">Validate</button>
-      <pre id="out">…</pre>
-    </main>
+    <input id="vat" placeholder="DE123456789" />
+    <button id="btn">Validate</button>
+    <pre id="out">…</pre>
+
     <script type="module">
-      import { validateCard } from './card.js';
-      const $ = (id) => document.getElementById(id);
+      import { isVatSafe } from './vat.js';
+      const $ = id => document.getElementById(id);
       $('btn').addEventListener('click', () => {
-        const res = validateCard($('pan').value);
+        const res = isVatSafe($('vat').value);
         $('out').textContent = JSON.stringify(res, null, 2);
       });
     </script>
