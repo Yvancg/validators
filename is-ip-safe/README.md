@@ -123,7 +123,7 @@ Returns a normalized IP string or an empty string if invalid.
 
 Open `ip-test.html` in your browser  
 or try the hosted demo 👉🏻 
-[Card Validator Test](https://yvancg.github.io/validators/is-ip-safe/ip-test.html)
+[IP Validator Test](https://yvancg.github.io/validators/is-ip-safe/ip-test.html)
 
 ---
 
