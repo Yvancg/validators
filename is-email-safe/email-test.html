@@ -1,83 +1,84 @@
 <!doctype html>
 <html lang="en">
-<meta charset="utf-8" />
-<title>is-email-safe — Validator Test</title>
-<style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 2rem;
-    background: #fafafa;
-    color: #111;
-  }
-  h1 {
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
-  }
-  .input-row {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  input {
-    flex: 1;
-    padding: 0.4rem 0.6rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  button {
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 6px;
-    background: #111;
-    color: #fff;
-    cursor: pointer;
-  }
-  pre {
-    background: #fff;
-    padding: 0.8rem;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 0.9rem;
-    white-space: pre-wrap;
-  }
-  footer {
-    margin-top: 2rem;
-    font-size: 0.85rem;
-    color: #666;
-  }
-</style>
+<head>
+  <meta charset="utf-8" />
+  <title>Email Validator — is-email-safe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --fg:#111827; --bg:#f9fafb; --border:#e5e7eb; --ok:#15803d; --bad:#b91c1c; --muted:#6b7280; }
+    body { font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--fg); margin:0; }
+    header { padding:18px 20px; background:#fff; border-bottom:1px solid var(--border); }
+    main { max-width:720px; margin:32px auto; padding:0 16px; }
+    h1 { font-size:20px; margin:0 0 16px 0; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:16px; }
+    input { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:10px; font-size:14px; }
+    .controls { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+    .btn { padding:10px 14px; border:1px solid var(--border); border-radius:10px; background:#111827; color:#fff; cursor:pointer; }
+    .btn.alt { background:#fff; color:#111827; }
+    .pill { padding:4px 10px; border-radius:999px; border:1px solid var(--border); font-size:12px; }
+    .ok { color:var(--ok); border-color:var(--ok); }
+    .bad { color:var(--bad); border-color:var(--bad); }
+    footer { font-size:12px; color:var(--muted); margin-top:24px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Email Validator — <code>is-email-safe/email.js</code></h1>
+  </header>
+  <main>
+    <div class="card">
+      <label for="email">Enter an email</label>
+      <input id="email" type="text" placeholder="name@example.com" value="user@example.com">
+      <div class="controls">
+        <button id="btn-validate" class="btn">Validate</button>
+        <button id="btn-clear" class="btn alt">Clear</button>
+      </div>
+    </div>
 
-<h1>is-email-safe — Live Tester</h1>
-<p>Validate and normalize email addresses in real time.</p>
+    <div class="card">
+      <label>Result</label>
+      <div id="result" style="margin-top:8px;">Awaiting input.</div>
+    </div>
 
-<div class="input-row">
-  <input id="email" type="text" placeholder="name@example.com" autofocus />
-  <button id="btn-validate">Validate</button>
-</div>
+    <div class="card">
+      <label>Examples</label>
+      <div class="controls">
+        <button class="btn alt ex">user@example.com</button>
+        <button class="btn alt ex">user@@example.com</button>
+        <button class="btn alt ex">name@sub.domain.org</button>
+        <button class="btn alt ex">john.doe@</button>
+      </div>
+    </div>
 
-<pre id="result">Enter an email above.</pre>
+    <footer>
+      Generated: <span id="today"></span>
+    </footer>
+  </main>
 
-<script type="module">
-  import { isEmail, normalizeEmail } from './email.js';
+  <script type="module">
+    import { isEmail, normalizeEmail } from './email.js';
 
-  const $ = id => document.getElementById(id);
-  const show = msg => $('result').textContent = msg;
+    const $ = id => document.getElementById(id);
+    $('today').textContent = new Date().toISOString().slice(0,10);
 
-  $('btn-validate').addEventListener('click', () => {
-    const raw = $('email').value.trim();
-    const normalized = normalizeEmail(raw);
-    const valid = isEmail(normalized);
-    const output = {
-      raw,
-      normalized,
-      valid
-    };
-    show(JSON.stringify(output, null, 2));
-  });
-</script>
+    $('btn-validate').addEventListener('click', run);
+    $('btn-clear').addEventListener('click', () => {
+      $('email').value = '';
+      $('result').innerHTML = 'Cleared.';
+    });
 
-<footer>
-  © 2025 Y Consulting LLC / Validators Project
-</footer>
+    document.querySelectorAll('.ex').forEach(b =>
+      b.addEventListener('click', () => { $('email').value = b.textContent; run(); })
+    );
+
+    function run() {
+      const input = $('email').value.trim();
+      const normalized = normalizeEmail(input);
+      const valid = isEmail(normalized);
+      $('result').innerHTML = valid
+        ? `<span class="pill ok">VALID</span> ${normalized}`
+        : `<span class="pill bad">INVALID</span> ${normalized}`;
+    }
+  </script>
+</body>
 </html>
