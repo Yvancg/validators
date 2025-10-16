@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '**/*.js'
+      - 'is-*/**/*.js'
       - '.github/workflows/bench.yml'
       - 'scripts/bench.mjs'
   workflow_dispatch:
