@@ -23,7 +23,7 @@ lightweight content moderation.
 
 ## Usage
 
-``` bash
+``` js
 import { minify, minifyJS, minifyCSS } from './minify.js';
 
 // JavaScript
@@ -94,6 +94,12 @@ or click 👉🏻 [Minificationr Test](https://yvancg.github.io/validators/is-mi
 ## 🛠 Development
 This module is standalone. You can copy `minify.js` into your own project.  
 No `npm install` or build step required.
+
+Node one-liners:
+```bash
+node is-minify/minify.js js < app.js > app.min.js
+node is-minify/minify.js css < styles.css > styles.min.css
+```
 
 ---
 
