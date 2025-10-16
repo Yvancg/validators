@@ -2,6 +2,7 @@
  * E.164 helpers
  * - normalizePhone: strip punctuation and spaces, ensure leading '+'
  * - isE164: strict E.164 check: '+' then 7–15 digits, first digit 1–9
+ * - validatePhone: loose input → normalize → strict check
  * - validateOptionalE164: allow empty string or valid E.164
  */
 
@@ -24,18 +25,23 @@ export function isE164(input) {
 }
 
 /** @param {string} input */
+export function validatePhone(input) {
+  const v = normalizePhone(input);
+  return isE164(v);
+}
+
+/** @param {string} input */
 export function validateOptionalE164(input) {
   const v = normalizePhone(input);
   return v === '' || isE164(v);
 }
 
-export function validateOptionalE164(input) {
-  const v = normalizePhone(input);
-  return v === '' || isE164(v);
-}
-
+/** @param {string} raw */
 export function isPhoneE164(raw) {
   return isE164(normalizePhone(String(raw)));
 }
+
+// explicit exports for external scripts
+export { normalizePhone, isE164, validatePhone, validateOptionalE164 };
 
 export default isPhoneE164;
