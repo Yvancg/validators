@@ -1,17 +1,34 @@
 # is-email-safe
 
+[![email gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/email.js.json)](./metrics/email.js.json)
+[![email ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/email.json)](./bench/email.json)
+
 **Lightweight RFC-like email validator and normalizer.**  
 No dependencies. Zero runtime risk from `eval` or regex DoS. MIT licensed.
 
 ---
 
 ## 🚀 Why
+
 [`validator.js`](https://www.npmjs.com/package/validator) is large and has had multiple vulnerabilities.  
-`is-email-safe` is 100 lines of auditable JS — simple, strict, and secure.
+`is-email-safe` is 100 lines of auditable JS — simple, strict, and secure.  
+It is designed for browser, Node.js, and edge runtimes, where dependency safety and payload size matter most.
+
+---
+
+## 🌟 Features
+
+- ✅ Strict RFC-like syntax checks  
+- ✅ No Unicode or emoji addresses  
+- ✅ Rejects consecutive dots and invalid domains  
+- ✅ Normalizes case and trims spaces  
+- ✅ Works offline, in browser, and edge runtimes  
+- ✅ 0 dependencies  
 
 ---
 
 ## 📦 Usage
+
 ```js
 import { isEmail, normalizeEmail } from './email.js';
 
@@ -28,6 +45,7 @@ isEmail('user@@domain');
 ---
 
 ## 🧩 Validation rules
+
 - Total length ≤ 254  
 - Local part ≤ 64  
 - ASCII-only (no UTF-8 emoji or accents)  
@@ -37,19 +55,66 @@ isEmail('user@@domain');
 
 ---
 
+## 🧠 API
+
+### `isEmail(raw: string): boolean`
+
+Validates the syntax and domain structure of an email.  
+Returns `true` if the address is valid and ASCII-compliant.
+
+### `normalizeEmail(raw: string): string`
+
+Returns a trimmed, lowercased version of the email.  
+If invalid, returns an empty string.
+
+---
+
+## 🧪 Example (test.html)
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script type="module">
+      import { isEmail, normalizeEmail } from './email.js';
+
+      const emails = [
+        'user@example.com',
+        '  USER+tag@Example.COM  ',
+        'foo@bar',
+        'bad@@domain.com',
+        'john..doe@example.com'
+      ];
+
+      for (const e of emails) {
+        console.log(e, '→', {
+          normalized: normalizeEmail(e),
+          valid: isEmail(e)
+        });
+      }
+    </script>
+  </body>
+</html>
+```
+
+---
+
 ## 🧪 Browser test
-Clone the repo, open `email-test.html` — interactive test in your browser
+
+Clone the repo, open `email-test.html` — interactive test in your browser  
 or click 👉🏻 [Email Validator Test](https://yvancg.github.io/validators/is-email-safe/email-test.html)
 
 ---
 
 ## 🛠 Development
+
 This module is standalone. You can copy `email.js` into your own project.  
 No `npm install` or build step required.
 
 ---
 
 ## 🪪 License
+
 MIT License  
 
 Copyright (c) 2025 **Y Consulting LLC**
@@ -79,9 +144,11 @@ THE SOFTWARE.
 If this library helped you, consider sponsoring its maintenance.
 
 ### GitHub Sponsors
+
 [👉 Sponsor me on GitHub](https://github.com/sponsors/yvancg)
 
 ### Buy Me a Coffee
+
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
 ### Custom link
