@@ -35,6 +35,52 @@ validatePhone('415-555-0123'); // true (normalizes to +4155550123)
 - Domain has ≥ 2 labels  
 - TLD = letters only, 2–63 chars  
 
+## API
+
+### `isE164(raw: string): boolean`
+
+Returns true only if the given string is a valid E.164 phone number, starting with + and containing only digits.
+
+### `normalizePhone(raw: string): string`
+
+Returns a cleaned and normalized E.164-like string (e.g. +14155550123).
+Removes spaces, parentheses, dots, and dashes.
+
+### `validatePhone(raw: string): boolean`
+
+Accepts loose input (with or without +) and attempts normalization before validating.
+Returns true only if the normalized result passes isE164.
+
+## Example (test.html)
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script type="module">
+      import { normalizePhone, isE164, validatePhone } from './phone.js';
+
+      const numbers = [
+        '(415) 555-0123',
+        '+1 415 555 0123',
+        '00441555550123',
+        '14155550123',
+        'abc+4155550123',
+        '+9999999999999999'
+      ];
+
+      for (const n of numbers) {
+        console.log(n, '→', {
+          normalized: normalizePhone(n),
+          valid: validatePhone(n),
+          strict: isE164(n)
+        });
+      }
+    </script>
+  </body>
+</html>
+```
+
 ---
 
 ## 🧪 Browser test
