@@ -1,5 +1,18 @@
 # Validators
 
+[![card ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/card.json)](./bench/card.json)
+[![card gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-card-safe/card.js.json)](./metrics/is-card-safe/card.js.json)
+[![email ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/email.json)](./bench/email.json)
+[![email gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-email-safe/email.js.json)](./metrics/is-email-safe/email.js.json)
+[![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
+[![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-iban-safe/iban.js.json)](./metrics/is-iban-safe/iban.js.json)
+[![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
+[![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-minify/minify.js.json)](./metrics/is-minify/minify.js.json)
+[![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
+[![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-phone-e164/phone.js.json)](./metrics/is-phone-e164/phone.js.json)
+[![url ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/url.json)](./bench/url.json)
+[![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-url-safe/url.js.json)](./metrics/is-url-safe/url.js.json)
+
 A collection of minimal, dependency-free, security-focused input validation helpers for modern web and edge environments.
 
 ## Overview
