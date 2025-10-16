@@ -1,37 +1,40 @@
-name: size
+name: update gzip metrics
 on:
   push:
     branches: [ main ]
     paths:
-      - 'is-*/**/*.js'
-      - '.github/workflows/size.yml'
-permissions:
-  contents: write
+      - '**/*.js'
+  workflow_dispatch:
 
 jobs:
-  size:
+  update-metrics:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compute sizes
-        shell: bash
+      - name: Compute gzip sizes for all JS files
         run: |
           mkdir -p metrics
-          # pick files you want to track
-          files=("is-minify/minify.js" "is-url-safe/url.js" "is-phone-e164/phone.js")
-          echo '{ "schemaVersion": 1, "label": "gzip", "message": "", "color": "blue" }' > metrics/_template.json
-          for f in "${files[@]}"; do
-            raw=$(wc -c < "$f" | xargs)
-            gz=$(gzip -9 -c "$f" | wc -c | xargs)
-            kb=$(awk "BEGIN{printf \"%.2fkB\", $gz/1024}")
-            jq --arg msg "$kb" '.message=$msg' metrics/_template.json > "metrics/$(basename "$f").json"
-            echo "$f -> raw=${raw}B, gzip=${gz}B"
-          done
-          rm metrics/_template.json
+          echo "Scanning submodules for JS files..."
 
-      - name: Commit JSON
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update gzip size metrics"
-          file_pattern: metrics/*.json
+          find . -type f -name "*.js" ! -path "*/node_modules/*" | while read -r f; do
+            [ "$f" = "./.github/workflows/size.yml" ] && continue
+            size=$(gzip -c "$f" | wc -c | awk '{printf "%.2fkB", $1/1024}')
+
+            # Extract base filename (e.g. card.js)
+            base=$(basename "$f")
+
+            # Write JSON to metrics/<filename>.json
+            out="metrics/${base}.json"
+            mkdir -p "$(dirname "$out")"
+            echo "{\"schemaVersion\":1,\"label\":\"gzip\",\"message\":\"$size\",\"color\":\"blue\"}" > "$out"
+
+            echo "→ $f → $out → $size"
+          done
+
+      - name: Commit and push updated metrics
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add metrics
+          git diff --quiet && echo "No changes" || (git commit -m "chore: update gzip size metrics" && git push)
