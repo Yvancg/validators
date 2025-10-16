@@ -1,58 +1,53 @@
-// scripts/bench.mjs
-import fs from 'node:fs';
-import path from 'node:path';
+import { writeFileSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
 
-const ROOT = process.cwd();
-const benchDir = path.join(ROOT, 'bench');
-fs.mkdirSync(benchDir, { recursive: true });
+// --- Import targets explicitly to avoid discovery misses ---
+import { minifyJS }     from '../is-minify/minify.js';
+import { isUrlSafe }    from '../is-url-safe/url.js';
+import { validatePhone }from '../is-phone-e164/phone.js';
+import { isEmail }      from '../is-email-safe/email.js';
+import { isIbanSafe }   from '../is-iban-safe/iban.js';
+import { validateCard } from '../is-card-safe/card.js';
 
-function bench(fn, input, iters = 1000) {
-  for (let i = 0; i < 50; i++) fn(input); // warmup
+function bench(fn, input, iters) {
+  // warmup
+  for (let i = 0; i < Math.min(100, iters); i++) fn(input);
   const t0 = performance.now();
   for (let i = 0; i < iters; i++) fn(input);
   const ms = performance.now() - t0;
   const ops = Math.round(iters / (ms / 1000));
-  return { ops };
+  return ops;
 }
 
-function badge(label, message) {
-  return { schemaVersion: 1, label, message, color: 'informational' };
-}
+const targets = [
+  { name: 'minify', fn: () => minifyJS('function x(){return 42}/*c*/'), iters: 2000 },
+  { name: 'url',    fn: () => isUrlSafe('https://example.com?q=1'),     iters: 20000 },
+  { name: 'email',  fn: () => isEmail('user@example.com'),              iters: 15000 },
+  { name: 'iban',   fn: () => isIbanSafe('DE44500105175407324931'),     iters: 400 },
+  { name: 'phone',  fn: () => validatePhone('+12025550123'),            iters: 10000 },
+  { name: 'card',   fn: () => validateCard('4111111111111111'),         iters: 800 },
+];
 
-const modules = fs
-  .readdirSync(ROOT)
-  .filter(d => d.startsWith('is-') && fs.statSync(d).isDirectory());
-
-for (const dir of modules) {
-  const jsFile = fs.readdirSync(dir).find(f => f.endsWith('.js'));
-  if (!jsFile) continue;
-
-  const name = path.basename(jsFile, '.js');
-  const fullPath = `./${dir}/${jsFile}`;
-
+let wrote = 0;
+for (const t of targets) {
   try {
-    const mod = await import(fullPath);
-    const fn = Object.values(mod).find(v => typeof v === 'function');
-    if (!fn) continue;
-
-    const sample =
-      name.includes('email') ? 'user@example.com'
-      : name.includes('phone') ? '+12025550123'
-      : name.includes('iban') ? 'DE44500105175407324931'
-      : name.includes('url') ? 'https://example.com'
-      : name.includes('card') ? '4111111111111111'
-      : name.includes('minify') ? 'function x(){return 1+2;}'
-      : 'test';
-
-    const { ops } = bench(fn, sample, 500);
-    const data = badge('throughput', `${ops.toLocaleString()} ops/s`);
-    const out = path.join(benchDir, `${name}.json`);
-    fs.writeFileSync(out, JSON.stringify(data, null, 2));
-    console.log(`✅ ${dir}/${jsFile} → ${ops} ops/s`);
-  } catch (err) {
-    console.warn(`⚠️ Skipped ${dir}/${jsFile}: ${err.message}`);
+    const ops = bench(t.fn, undefined, t.iters);
+    const json = {
+      schemaVersion: 1,
+      label: 'speed',
+      message: `${ops.toLocaleString()} ops/s`,
+      color: 'informational'
+    };
+    writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
+    wrote++;
+  } catch (e) {
+    const json = {
+      schemaVersion: 1,
+      label: 'speed',
+      message: 'error',
+      color: 'red'
+    };
+    writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
   }
 }
-
-console.log('🏁 Benchmarks complete.');
+if (!wrote) process.exit(1);
