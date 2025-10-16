@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "isIbanSafe",
+  "label": "throughput",
   "message": "153992 ops/s",
   "color": "informational"
 }
