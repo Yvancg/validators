@@ -44,6 +44,10 @@ Available modules:
   [![tin gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/tin.js.json)](./metrics/tin.js.json)
   [![tin ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/tin.json)](./bench/tin.json)
 
+- **is-vat-safe** — EU VAT ID pattern validator for all member states (format-only, no checksum).  
+  [![vat gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/vat.js.json)](./metrics/vat.js.json)
+  [![vat ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/vat.json)](./bench/vat.json)
+
 All helpers are designed for use in:
 - Browsers (ESM)
 - Node.js / Deno / Bun (import)
@@ -64,6 +68,7 @@ You can try each validator interactively in your browser:
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 - [US TIN Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
+- [EU VAT Validator Test](https://yvancg.github.io/validators/is-vat-safe/vat-test.html)
 
 Each page loads its respective module and allows interactive validation.
 
@@ -86,7 +91,8 @@ import { isJsonSafe } from './is-json-safe/json.js';
 import { minifyJS, minifyCSS } from './is-minify/minify.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
-import { validateUsTin } from './is-us-tin-safe/tin.js';
+import { validateITIN } from './is-us-tin-safe/tin.js';
+import { isVatSafe } from './is-vat-safe/vat.js';
 
 console.log(validateCard('4111111111111111'));              // { ok: true, brand: 'visa', ... }
 console.log(isEmailSafe('user@example.com'));               // true
@@ -98,6 +104,7 @@ console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}
 console.log(isPhoneE164('+12025550123'));                   // true
 console.log(isUrlSafe('https://example.com'));              // true
 console.log(validateUsTin('12-3456789'));                   // { ok: true, type: 'ein', ... }
+console.log(isVatSafe('DE123456789'));                      // { ok: true, country: 'DE', ... }
 ```
 
 ## Folder Structure
