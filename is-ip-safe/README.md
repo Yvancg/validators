@@ -47,36 +47,50 @@ isIPv6('fe80::1');     // → true
 
 ## 🧩 Validation rules
 
-- Digits-only after normalization  
-- Length 12–19 digits  
-- Luhn checksum must pass  
-- Brand recognized or reported as `unknown`  
-- Optional `allowBrands` / `blockBrands` policy checks
+### IPv4 ###
+
+- Must contain exactly 4 numeric segments, separated by dots (.)
+- Each segment must be an integer between 0 and 255
+- No leading zeros (e.g. 01 is invalid)
+- Only digits allowed — no letters or special characters
+
+### IPv6 ###
+
+- Must contain 3–8 groups separated by colons (:)
+- Each group must contain 1–4 hexadecimal characters (0-9, a-f, A-F)
+- Supports compressed notation (::) exactly once per address
+- Rejects invalid characters or too many segments
+- Handles mixed uppercase/lowercase safely
+
+### Common rules ###
+
+- Input is trimmed before validation
+- Empty or whitespace-only strings are invalid
+- No regular-expression backtracking (safe for untrusted input)
 
 ---
 
 ## 🧠 API
 
-### `validateCard(raw: string, opts?: ValidateOpts): Result`
+### `isIpSafe(raw: string): boolean`  
 
-**Options**
-```ts
-type ValidateOpts = {
-  allowBrands?: string[]; // e.g. ['visa','mastercard']
-  blockBrands?: string[]; // e.g. ['unionpay']
-};
-```
+Returns `true` if the given string is a valid IPv4 **or** IPv6 address.
 
-**Result**
-```ts
-type Result = {
-  ok: boolean;
-  brand?: string;         // 'visa' | 'mastercard' | 'amex' | ...
-  normalized?: string;    // digits-only PAN if ok
-  last4?: string;         // last 4 digits if ok
-  issues: string[];       // e.g. ['too_short','luhn_failed','unknown_brand','brand_not_allowed']
-};
-```
+### `isIPv4(raw: string): boolean`  
+
+Returns `true` only if the input is a valid IPv4 address in the form `A.B.C.D`,  
+where each segment is an integer between `0` and `255` and has **no leading zeros**.
+
+### `isIPv6(raw: string): boolean`  
+
+Returns `true` only if the input is a valid IPv6 address, supporting a single `::` compression,  
+with each group containing 1–4 hexadecimal characters (`0–9`, `a–f`, `A–F`).
+
+### `normalizeIp(raw: string): string`  
+
+Returns a normalized IP string or an empty string if invalid.  
+- IPv4: removes extra spaces and leading zeros  
+- IPv6: converts to lowercase and applies minimal compression rules
 
 ---
 
