@@ -1,4 +1,4 @@
-// card.js 
+// card.js
 // Dependency-free credit card validator + brand detector.
 // Normalizes to digits-only. Runs Luhn. Identifies major brands by IIN ranges.
 
