@@ -1,0 +1,28 @@
+name: bench
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'is-minify/minify.js'
+      - 'bench/**'
+      - '.github/workflows/bench.yml'
+permissions:
+  contents: write
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run benchmark
+        run: |
+          node --version
+          node bench/bench.mjs
+      - name: Commit results
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update benchmark badges"
+          file_pattern: bench/*.json
