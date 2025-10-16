@@ -109,7 +109,7 @@ type Result = {
 ## 🧪 Browser test
 
 Open `card-test.html` in your browser  
-or try the hosted demo:  
+or try the hosted demo 👉🏻 
 [Card Validator Test](https://yvancg.github.io/validators/is-card-safe/card-test.html)
 
 ---
