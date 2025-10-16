@@ -1,26 +1,28 @@
-# .github/workflows/bench.yml
 name: bench
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'is-*/**.js'
-      - 'bench/bench.mjs'
+      - 'scripts/bench-changed.mjs'
   workflow_dispatch:
 
+permissions: { contents: write }
+
 jobs:
-  bench:
+  run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - name: Run benches
-        run: node bench/bench.mjs
-      - name: Commit bench json
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@users.noreply.github.com"
-          git add bench/*.json
-          git commit -m "chore(bench): update bench json" || echo "no changes"
-          git push
+      - name: Run bench for changed files
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER:  ${{ github.sha }}
+        run: node scripts/bench-changed.mjs
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(bench): refresh ops/s badges'
+          file_pattern: bench/*.json
