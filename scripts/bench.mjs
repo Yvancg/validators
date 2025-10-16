@@ -9,7 +9,8 @@ import { isEmail }      from '../is-email-safe/email.js';
 import { isIbanSafe }   from '../is-iban-safe/iban.js';
 import { validateCard } from '../is-card-safe/card.js';
 import { isJsonSafe }   from '../is-json-safe/json.js';
-import { validateTIN } from '../is-us-tin-safe/tin.js';
+import { validateTIN }  from '../is-us-tin-safe/tin.js';
+import { isIpSafe }     from '../is-ip-safe/ip.js';
 
 function bench(fn, input, iters) {
   // warmup
@@ -30,6 +31,7 @@ const targets = [
   { name: 'card',   fn: () => validateCard('4111111111111111'),                 iters: 800 },
   { name: 'json',   fn: () => isJsonSafe('{"a":1,"b":{"c":[1,2,3],"d":true}}'), iters: 10000 },
   { name: 'tin',    fn: () => validateTIN('12-3456789'),                        iters: 10000 },
+  { name: 'ip',     fn: () => isIpSafe('192.168.0.1'),                          iters: 20000 },
 ];
 
 let wrote = 0;
