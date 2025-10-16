@@ -1,18 +1,23 @@
 # is-iban-safe
 
+[![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/iban.js.json)](./metrics/iban.js.json)
+[![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
+
 **Tiny, dependency-free IBAN validator and normalizer (ISO 13616 + ISO 7064).**  
 Lightweight, auditable, and backed by the official SWIFT IBAN Registry.
 
 ---
 
 ## 🚀 Why
+
 Most IBAN libraries depend on legacy regex sets or outdated country lists.  
-`is-iban-valid` is a single-file validator that loads an up-to-date registry snapshot from SWIFT and verifies every rule natively — checksum, country length, and BBAN structure.
+`is-iban-safe` is a single-file validator that loads an up-to-date registry snapshot from SWIFT and verifies every rule natively — checksum, country length, and BBAN structure.
 
 ---
 
 ## 📦 Usage
-```bash
+
+```js
 import { isIbanSafe } from './is-iban-safe/iban.js';
 
 isIbanSafe('DE44500105175407324931');
@@ -28,34 +33,38 @@ isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
 ---
 
 ## 🧩 Validation rules
--	Country must exist in the SWIFT IBAN Registry
--	Total length matches registry entry
-- Check digits pass ISO 7064 Mod-97 checksum
-- Structure follows country-specific BBAN pattern
-- Optional allowlist / blocklist filters by country code
-- Optional strict casing (reject lowercase input)
+
+- Country must exist in the SWIFT IBAN Registry  
+- Total length matches registry entry  
+- Check digits pass ISO 7064 Mod-97 checksum  
+- Structure follows country-specific BBAN pattern  
+- Optional allowlist / blocklist filters by country code  
+- Optional strict casing (reject lowercase input)  
 
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `iban-test.html` — interactive test in your browser 
+
+Clone the repo, open `iban-test.html` — interactive test in your browser  
 or click 👉🏻 [IBAN Validator Test](https://yvancg.github.io/validators/is-iban-safe/iban-test.html)
 
 ---
 
 ## 🛠 Development
+
 This module is standalone. You can copy `iban.js` and `iban_registry_full.json` into your own project.  
 No `npm install` or build step required.
 
 To refresh the registry:
-	1.	Download the latest SWIFT IBAN Registry from
-https://www.swift.com/swift-resource/11971/download
-	2.	Run the parser script to rebuild `iban_registry_full.json`
-	3.	Verify all examples pass Mod-97 and length checks
+1. Download the latest SWIFT IBAN Registry from  
+   https://www.swift.com/swift-resource/11971/download
+2. Run the parser script to rebuild `iban_registry_full.json`  
+3. Verify all examples pass Mod-97 and length checks  
 
 ---
 
 ## 🪪 License
+
 MIT License  
 
 Copyright (c) 2025 **Y Consulting LLC**
@@ -85,9 +94,11 @@ THE SOFTWARE.
 If this library helped you, consider sponsoring its maintenance.
 
 ### GitHub Sponsors
+
 [👉 Sponsor me on GitHub](https://github.com/sponsors/yvancg)
 
 ### Buy Me a Coffee
+
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
 ### Custom link
