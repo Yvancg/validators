@@ -43,6 +43,59 @@ isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
 
 ---
 
+## 🧠 API
+
+### `isIbanSafe(raw: string, options?: object): Promise<{ ok: boolean, normalized?: string, issues: string[] }>`
+
+Validates an IBAN against the official SWIFT registry.
+
+**Options**
+- `allowCountries` – array of allowed ISO 3166-1 alpha-2 country codes  
+- `blockCountries` – array of blocked ISO country codes  
+- `strictCase` – if `true`, rejects lowercase input  
+- `strictStructure` – if `true`, enforces BBAN format from registry  
+- `maxLength` / `minLength` – optional overrides for sanity checks  
+
+**Returns**
+A structured result:
+```js
+{
+  ok: true,
+  normalized: 'DE44500105175407324931',
+  issues: []
+}
+```
+
+---
+
+## 🧪 Example (test.html)
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script type="module">
+      import { isIbanSafe } from './iban.js';
+
+      const ibans = [
+        'DE44500105175407324931',
+        'GB29NWBK60161331926819',
+        'FR1420041010050500013M02606',
+        'DE00500105175407324931',
+        'IR062960000000100324200001'
+      ];
+
+      for (const iban of ibans) {
+        const result = await isIbanSafe(iban, { strictStructure: true });
+        console.log(iban, '→', result);
+      }
+    </script>
+  </body>
+</html>
+```
+
+---
+
 ## 🧪 Browser test
 
 Clone the repo, open `iban-test.html` — interactive test in your browser  
