@@ -24,7 +24,6 @@ It safely handles strings, template literals, and regex literals in JS, and pres
 - ✅ Safe comment stripping and whitespace collapse  
 - ✅ No AST, no build step, no dependencies  
 - ✅ Works in browser, Node.js, and edge runtimes  
-- ✅ <1 KB gzipped
 
 ---
 
