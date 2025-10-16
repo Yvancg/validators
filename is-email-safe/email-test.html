@@ -59,6 +59,18 @@
     import { isEmail, normalizeEmail } from './email.js';
 
     const $ = id => document.getElementById(id);
+
+    
+    // Escape HTML special characters in user-supplied values
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     $('today').textContent = new Date().toISOString().slice(0,10);
 
     $('btn-validate').addEventListener('click', run);
@@ -74,10 +86,11 @@
     function run() {
       const input = $('email').value.trim();
       const normalized = normalizeEmail(input);
+      const safeEmail = escapeHtml(normalized);
       const valid = isEmail(normalized);
       $('result').innerHTML = valid
-        ? `<span class="pill ok">VALID</span> ${normalized}`
-        : `<span class="pill bad">INVALID</span> ${normalized}`;
+        ? `<span class="pill ok">VALID</span> ${safeEmail}`
+        : `<span class="pill bad">INVALID</span> ${safeEmail}`;
     }
   </script>
 </body>
