@@ -77,12 +77,29 @@
       b.addEventListener('click', () => { $('url').value = b.textContent; run(); })
     );
 
+    // Escapes HTML metacharacters in text for safe display
+    function escapeHTML(str) {
+      return str.replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+          '/': '&#x2F;',
+          '`': '&#x60;',
+          '=': '&#x3D;'
+        })[s];
+      });
+    }
+
     function run() {
       const input = $('url').value;
       const ok = isUrlSafe(input);
+      const safeInput = escapeHTML(input);
       $('result').innerHTML = ok
-        ? `<span class="pill ok">VALID</span> ${input}`
-        : `<span class="pill bad">INVALID</span> ${input}`;
+        ? `<span class="pill ok">VALID</span> ${safeInput}`
+        : `<span class="pill bad">INVALID</span> ${safeInput}`;
     }
   </script>
 </body>
