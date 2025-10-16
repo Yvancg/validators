@@ -72,6 +72,15 @@ You can try each validator interactively in your browser:
 
 Each page loads its respective module and allows interactive validation.
 
+## Install
+
+npm i @yvancg/validators  # or per-module packages when published
+
+## API Guarantees
+
+- No eval or dynamic code.
+- Regexes fuzz-tested for catastrophic backtracking.
+
 ## Design Principles
 
 1. **Safety first:** Reject malformed or ambiguous inputs by default.
@@ -103,7 +112,7 @@ console.log(minifyJS('function x () { return 1 + 2 ; }'));  // 'function x(){ret
 console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}'
 console.log(isPhoneE164('+12025550123'));                   // true
 console.log(isUrlSafe('https://example.com'));              // true
-console.log(validateUsTin('12-3456789'));                   // { ok: true, type: 'ein', ... }
+console.log(validateITIN('12-3456789'));                   // { ok: true, type: 'ein', ... }
 console.log(isVatSafe('DE123456789'));                      // { ok: true, country: 'DE', ... }
 ```
 
@@ -123,7 +132,8 @@ validators/
   ├─ is-minify/
   ├─ is-phone-e164/
   ├─ is-url-safe/
-  └─ is-us-tin-safe/
+  ├─ is-us-tin-safe/
+  └─ is-vat-safe/
 ```
 
 ## Security Notes
