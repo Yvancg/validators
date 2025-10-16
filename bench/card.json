@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "validateCard",
+  "label": "throughput",
   "message": "305691 ops/s",
   "color": "informational"
 }
