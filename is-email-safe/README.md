@@ -10,6 +10,7 @@ No dependencies. Zero runtime risk from `eval` or regex DoS. MIT licensed.
 
 ## 🚀 Why
 
+[validator.js](https://www.npmjs.com/package/validator) is large and has had multiple vulnerabilities.  
 `is-email-safe` is 100 lines of auditable JS — simple, strict, and secure.  
 It is designed for browser, Node.js, and edge runtimes, where dependency safety and payload size matter most.
 
