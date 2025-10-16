@@ -148,18 +148,18 @@ body, html {
     $('btn-fill-js').addEventListener('click', () => {
       modeEl.value = 'js';
       inEl.value = SAMPLES.js;
-      runMinify();
+      updateStats(inEl.value, '');
     });
     $('btn-fill-css').addEventListener('click', () => {
       modeEl.value = 'css';
       inEl.value = SAMPLES.css;
-      runMinify();
+      updateStats(inEl.value, '');
     });
     inEl.addEventListener('input', () => updateStats(inEl.value, outEl.value));
 
-    // initial state
+    // initial state (no auto-minify)
     inEl.value = SAMPLES.js;
-    runMinify();
+    updateStats(inEl.value, '');
   </script>
 </body>
 </html>
