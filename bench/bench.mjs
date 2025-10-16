@@ -34,7 +34,7 @@ for (const t of targets) {
     const ops = bench(t.fn, undefined, t.iters);
     const json = {
       schemaVersion: 1,
-      label: 'speed',
+      label: 'throughput',
       message: `${ops.toLocaleString()} ops/s`,
       color: 'informational'
     };
@@ -43,7 +43,7 @@ for (const t of targets) {
   } catch (e) {
     const json = {
       schemaVersion: 1,
-      label: 'speed',
+      label: 'throughput',
       message: 'error',
       color: 'red'
     };
