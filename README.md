@@ -8,7 +8,8 @@ A collection of minimal, dependency-free, security-focused input validation help
 
 Available modules:
 
-- **is-card-safe** — Credit card validator with Luhn check and brand detection (Visa, Mastercard, Amex, etc.).  
+- **is-card-safe** — Credit card validator with Luhn check and brand detection (Visa, Mastercard, Amex, etc.).
+  [![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/card.js.json)](./metrics/card.js.json)
   [![card ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/card.json)](./bench/card.json)
   [![card gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/is-card-safe/card.js.json)](./metrics/is-card-safe/card.js.json)
 - **is-email-safe** — Strict RFC-like ASCII email validation, no external dependencies.  
