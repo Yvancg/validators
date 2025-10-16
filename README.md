@@ -10,6 +10,7 @@ Available modules:
 
 - **is-card-safe** — Credit card validator with Luhn check and brand detection (Visa, Mastercard, Amex, etc.).  
   [![card gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/card.js.json)](./metrics/card.js.json)
+  [![card ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/card.json)](./bench/card.json)
 - **is-email-safe** — Strict RFC-like ASCII email validation, no external dependencies.  
   [![email gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/email.js.json)](./metrics/email.js.json)
 - **is-iban-safe** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.  
