@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "throughput",
-  "message": "1246618 ops/s",
+  "label": "isEmailSafe",
+  "message": "1015051 ops/s",
   "color": "informational"
 }

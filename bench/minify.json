@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "throughput",
-  "message": "200100 ops/s",
+  "label": "minifyJS",
+  "message": "210494 ops/s",
   "color": "informational"
 }
