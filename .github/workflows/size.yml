@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '**/*.js'            # run when JS changes land on main
+      - 'is-*/**/*.js'       # run when JS changes land on main
       - '.github/workflows/size.yml'
   workflow_dispatch:         # allow manual runs
 
