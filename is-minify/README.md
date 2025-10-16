@@ -87,7 +87,7 @@ Strips /*...*/ comments, collapses whitespace, tightens : ; { } , > + ~ =.
 
 ## 🧪 Browser test
 Clone the repo, open `minify-test.html` — interactive test in your browser
-or click 👉🏻 [Minificationr Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
+or click 👉🏻 [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
 
 ---
 
