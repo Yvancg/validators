@@ -1,1 +1,6 @@
-{"schemaVersion":1,"label":"phone ops/s","message":"pending","color":"lightgrey"}
+{
+  "schemaVersion": 1,
+  "label": "throughput",
+  "message": "1,414,435 ops/s",
+  "color": "informational"
+}

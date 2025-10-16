@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "isUrlSafe",
-  "message": "987042 ops/s",
+  "label": "throughput",
+  "message": "789,960 ops/s",
   "color": "informational"
 }
