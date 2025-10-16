@@ -1,92 +1,105 @@
 # is-url-safe
 
-Strict, dependency-free HTTP(S) URL validator for browser and Node.
+[![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/url.js.json)](./metrics/url.js.json)
+[![url ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/url.json)](./bench/url.json)
 
-## Overview
+**Strict, dependency-free HTTP(S) URL validator and normalizer.**  
+Lightweight, auditable, and safe to use in browsers, Node.js, or edge runtimes.
 
-`is-url-safe` rejects non-HTTP schemes like `javascript:`, `data:`, and `mailto:`.
-It performs structural validation using the built-in `URL` constructor, then enforces
-a restricted protocol and a clean ASCII hostname.
+---
 
-This helper is designed for client-side form validation, link sanitization, and
-lightweight content moderation.
+## 🚀 Why
 
-## Features
+Most URL validators are too permissive or allow unsafe schemes like `javascript:` or `data:`.  
+`is-url-safe` enforces strict `http(s)`-only rules with zero dependencies and predictable behavior.
 
-- ✅ Only `http` and `https` schemes allowed
-- 🚫 Blocks `javascript:`, `data:`, `file:`, `ftp:`, and similar schemes
-- ✅ Verifies hostname presence and rejects invalid characters (`<`, `>`, space)
-- ✅ Browser and Node.js compatible
-- ✅ No dependencies
-- 🪶 <1 KB
+## 🌟 Features
 
-## Usage
+- ✅ Only allows `http` and `https` protocols  
+- 🚫 Blocks `javascript:`, `data:`, `file:`, `ftp:` and similar schemes  
+- ✅ Rejects invalid hostnames and disallowed characters (`<`, `>`, space)  
+- ✅ Compatible with browsers, Node.js, and edge environments  
+- ✅ Zero dependencies — pure ES module  
+
+## 📦 Usage
 
 ```js
 import { isUrlSafe, normalizeUrl } from './url.js';
 
-isUrlSafe('https://example.com');         // true
-isUrlSafe('javascript:alert(1)');         // false
-isUrlSafe('ftp://server.com');            // false
-isUrlSafe('https://good.com/<bad>');      // false
-
-normalizeUrl('https://example.com/path?q=1');
-// -> 'https://example.com/path?q=1'
+isUrlSafe('https://example.com');        // true
+isUrlSafe('javascript:alert(1)');        // false
+normalizeUrl(' https://example.com/path?q=1 ');
+// → "https://example.com/path?q=1"
 ```
 
-## API
+---
+
+## 🧩 Validation rules
+
+- Must start with `http` or `https`  
+- Hostname must be present and contain only valid ASCII characters  
+- No spaces or control characters allowed  
+- Optional path, query, and hash supported  
+
+---
+
+## 🧠 API
 
 ### `isUrlSafe(raw: string): boolean`
 
-Returns `true` only if the given string is a valid `http(s)` URL with a
-non-empty hostname and without control characters.
+Returns `true` only if the given string is a valid HTTP(S) URL with a non-empty hostname and without control characters.
 
 ### `normalizeUrl(raw: string): string`
 
-Returns a normalized absolute URL (protocol, hostname, path, query, hash).
+Returns a normalized absolute URL including protocol, hostname, path, query, and hash.  
 Returns an empty string if invalid.
 
-## Example (test.html)
+---
+
+## 🧪 Example (test.html)
 
 ```html
 <!DOCTYPE html>
 <html>
-<body>
-<script type="module">
-import { isUrlSafe } from './url.js';
+  <body>
+    <script type="module">
+      import { isUrlSafe } from './url.js';
 
-const urls = [
-  'https://example.com',
-  'http://sub.domain.org/path?x=1',
-  'ftp://server.com',
-  'javascript:alert(1)',
-  'data:text/plain,hi',
-  'https://good.com/<bad>'
-];
+      const urls = [
+        'https://example.com',
+        'http://sub.domain.org/path?x=1',
+        'ftp://server.com',
+        'javascript:alert(1)',
+        'data:text/plain,hi',
+        'https://good.com/<bad>'
+      ];
 
-for (const u of urls) {
-  console.log(u, '=>', isUrlSafe(u));
-}
-</script>
-</body>
+      for (const u of urls) {
+        console.log(u, '=>', isUrlSafe(u));
+      }
+    </script>
+  </body>
 </html>
 ```
 
 ---
 
 ## 🧪 Browser test
-Clone the repo, open `url-test.html` — interactive test in your browser
+
+Clone the repo, open `url-test.html` — interactive test in your browser  
 or click 👉🏻 [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 
 ---
 
 ## 🛠 Development
+
 This module is standalone. You can copy `url.js` into your own project.  
 No `npm install` or build step required.
 
 ---
 
 ## 🪪 License
+
 MIT License  
 
 Copyright (c) 2025 **Y Consulting LLC**
@@ -116,9 +129,11 @@ THE SOFTWARE.
 If this library helped you, consider sponsoring its maintenance.
 
 ### GitHub Sponsors
+
 [👉 Sponsor me on GitHub](https://github.com/sponsors/yvancg)
 
 ### Buy Me a Coffee
+
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
 ### Custom link
