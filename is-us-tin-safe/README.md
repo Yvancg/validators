@@ -112,7 +112,7 @@ type Result = {
 
 Open `tin-test.html` in your browser  
 or try the hosted demo 👉🏻 
-[Card Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
+[US TIN Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
 
 ---
 
