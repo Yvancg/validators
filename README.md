@@ -17,6 +17,9 @@ Available modules:
 - **is-iban-safe** — ISO 13616 / ISO 7064 IBAN validator powered by the official SWIFT registry.  
   [![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/iban.js.json)](./metrics/iban.js.json)
   [![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
+- **is-json-safe** — JSON structure validator and sanitizer that enforces depth, size, and key limits.  
+  [![json gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/json.js.json)](./metrics/json.js.json)
+  [![json ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/json.json)](./bench/json.json)
 - **is-minify** — Safe, dependency-free JavaScript and CSS minifier for browser and Node.  
   [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
   [![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
@@ -41,6 +44,7 @@ You can try each validator interactively in your browser:
 - [Card Validator Test](https://yvancg.github.io/validators/is-card-safe/card-test.html)
 - [Email Validator Test](https://yvancg.github.io/validators/is-email-safe/email-test.html)
 - [IBAN Validator Test](https://yvancg.github.io/validators/is-iban-safe/iban-test.html)
+- [JSON Validator Test](https://yvancg.github.io/validators/is-json-safe/json-test.html)
 - [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
@@ -61,17 +65,19 @@ Each page loads its respective module and allows interactive validation.
 import { validateCard } from './is-card-safe/card.js';
 import { isEmailSafe } from './is-email-safe/email.js';
 import { isIbanSafe } from './is-iban-safe/iban.js';
+import { isJsonSafe } from './is-json-safe/json.js';
 import { minifyJS, minifyCSS } from './is-minify/minify.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
 
-console.log(validateCard('4111111111111111'));    // { ok: true, brand: 'visa', ... }
-console.log(isEmailSafe('user@example.com'));     // true
-console.log(isIbanSafe('DE44500105175407324931')) // { ok: true, ... }
-console.log(minifyJS('function x () { return 1 + 2 ; }')); // 'function x(){return 1+2;}'
+console.log(validateCard('4111111111111111'));              // { ok: true, brand: 'visa', ... }
+console.log(isEmailSafe('user@example.com'));               // true
+console.log(isIbanSafe('DE44500105175407324931'))           // { ok: true, ... }
+console.log(isJsonSafe('{"user":"alice","id":123}'));       // true
+console.log(minifyJS('function x () { return 1 + 2 ; }'));  // 'function x(){return 1+2;}'
 console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}'
-console.log(isPhoneE164('+12025550123'));         // true
-console.log(isUrlSafe('https://example.com'));    // true
+console.log(isPhoneE164('+12025550123'));                   // true
+console.log(isUrlSafe('https://example.com'));              // true
 ```
 
 ## Folder Structure
@@ -85,6 +91,7 @@ validators/
   ├─ is-card-safe/
   ├─ is-email-safe/
   ├─ is-iban-safe/
+  ├─ is-json-safe/
   ├─ is-minify/
   ├─ is-phone-e164/
   └─ is-url-safe/
