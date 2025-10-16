@@ -41,7 +41,5 @@ export function isPhoneE164(raw) {
   return isE164(normalizePhone(String(raw)));
 }
 
-// explicit exports for external scripts
-export { normalizePhone, isE164, validatePhone, validateOptionalE164 };
-
+// Default export kept for convenience
 export default isPhoneE164;
