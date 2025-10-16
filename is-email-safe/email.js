@@ -33,3 +33,9 @@ export function isEmail(input) {
 
 /** Alias for backward compatibility */
 export const validateEmail = isEmail;
+
+export function isEmailSafe(raw) {             // <-- add
+  return isEmail(raw);
+}
+
+export default isEmailSafe;                    // <-- add default
