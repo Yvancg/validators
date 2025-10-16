@@ -3,25 +3,26 @@
 [![tin gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/tin.js.json)](../metrics/tin.js.json)
 [![tin ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/tin.json)](../bench/tin.json)
 
-**Lightweight, dependency-free credit card validator and brand detector.**  
-Performs Luhn checksum, detects brand (Visa, Mastercard, Amex, etc.), and normalizes safely.
+**Lightweight, dependency-free US Tax ID (TIN/EIN/SSN/ITIN) validator and normalizer.**  
+Validates US Taxpayer Identification Numbers (EIN, SSN, ITIN) using IRS-issued format rules.
 
 ---
 
 ## 🚀 Why
 
-Most card libraries are heavy or outdated.  
-`is-card-safe` is a single auditable file that validates format and checksum locally. No network calls. No logging.
+Most TIN or SSN libraries are outdated, regex-only, or rely on external APIs.
+`is-us-tin-safe` is a single auditable ES module that checks IRS formatting and known invalid patterns, locally, securely, and with zero dependencies.
 
 ---
 
 ## 🌟 Features
 
-- ✅ Luhn (mod-10) checksum  
-- ✅ Brand detection: Visa, Mastercard, Amex, Discover, JCB, Diners, UnionPay, Maestro, MIR  
-- ✅ Normalizes input to digits-only and exposes `last4`  
-- ✅ Optional allow/block brand policies  
-- ✅ Works in browsers, Node.js, and edge runtimes  
+- ✅ Detects and validates EIN, SSN, and ITIN formats
+- ✅ Normalizes input to digits-only (removes - and spaces)
+- ✅ Blocks invalid SSNs (000, 666, ≥900 ranges, and 078-05-1120)
+- ✅ EIN prefix validation using official IRS assignment list
+- ✅ ITIN validation with proper range checks (70–88, 90–92, 94–99)
+- ✅ Works in browsers, Node.js, and edge runtimes
 - ✅ Zero dependencies — pure ES module
 
 ---
@@ -29,42 +30,44 @@ Most card libraries are heavy or outdated.
 ## 📦 Usage
 
 ```js
-import { validateCard } from './card.js';
+import validateTIN, { isEIN, isSSN, isITIN } from './tin.js';
 
-validateCard('4111 1111 1111 1111');
-// → { ok: true, normalized: '4111111111111111', brand: 'visa', last4: '1111', issues: [] }
+validateTIN('12-3456789');
+// → { ok: true, normalized: '123456789', type: 'ein', issues: [] }
 
-validateCard('5555 5555 5555 4444');
-// → { ok: true, normalized: '5555555555554444', brand: 'mastercard', last4: '4444', issues: [] }
+validateTIN('123-45-6789');
+// → { ok: true, normalized: '123456789', type: 'ssn', issues: [] }
 
-validateCard('1234 5678 9012 3456');
-// → { ok: false, brand: 'unknown', issues: ['luhn_failed','unknown_brand'] }
+validateTIN('900-70-1234');
+// → { ok: true, normalized: '900701234', type: 'itin', issues: [] }
 
-validateCard('4111 1111 1111 1111', { allowBrands: ['mastercard'] });
-// → { ok: false, brand: 'visa', issues: ['brand_not_allowed'] }
+validateTIN('666-12-3456');
+// → { ok: false, type: 'unknown', issues: ['unknown_type'] }
 ```
 
 ---
 
 ## 🧩 Validation rules
 
-- Digits-only after normalization  
-- Length 12–19 digits  
-- Luhn checksum must pass  
-- Brand recognized or reported as `unknown`  
-- Optional `allowBrands` / `blockBrands` policy checks
+- Digits-only normalization
+- Must be 9 digits
+- EIN prefixes restricted to valid IRS-issued blocks
+- SSN excludes 000, 666, and numbers ≥ 900
+- SSN cannot include 078-05-1120 (known fake)
+- ITIN must start with 9 and follow specific group ranges
+- Optional allowTypes / blockTypes filters available
 
 ---
 
 ## 🧠 API
 
-### `validateCard(raw: string, opts?: ValidateOpts): Result`
+### `validateTIN(raw: string, opts?: ValidateOpts): Result`
 
 **Options**
 ```ts
 type ValidateOpts = {
-  allowBrands?: string[]; // e.g. ['visa','mastercard']
-  blockBrands?: string[]; // e.g. ['unionpay']
+  allowTypes?: string[]; // e.g. ['ein','ssn']
+  blockTypes?: string[]; // e.g. ['itin']
 };
 ```
 
@@ -72,10 +75,9 @@ type ValidateOpts = {
 ```ts
 type Result = {
   ok: boolean;
-  brand?: string;         // 'visa' | 'mastercard' | 'amex' | ...
-  normalized?: string;    // digits-only PAN if ok
-  last4?: string;         // last 4 digits if ok
-  issues: string[];       // e.g. ['too_short','luhn_failed','unknown_brand','brand_not_allowed']
+  type: 'ein' | 'ssn' | 'itin' | 'unknown';
+  normalized?: string;  // digits-only TIN if ok
+  issues: string[];     // e.g. ['bad_format','unknown_type','type_blocked']
 };
 ```
 
@@ -88,15 +90,15 @@ type Result = {
 <html>
   <body>
     <main>
-      <input id="pan" placeholder="4111 1111 1111 1111" />
+      <input id="tin" placeholder="12-3456789 or 123-45-6789" />
       <button id="btn">Validate</button>
       <pre id="out">…</pre>
     </main>
     <script type="module">
-      import { validateCard } from './card.js';
+      import validateTIN from './tin.js';
       const $ = (id) => document.getElementById(id);
       $('btn').addEventListener('click', () => {
-        const res = validateCard($('pan').value);
+        const res = validateTIN($('tin').value);
         $('out').textContent = JSON.stringify(res, null, 2);
       });
     </script>
@@ -108,22 +110,23 @@ type Result = {
 
 ## 🧪 Browser test
 
-Open `card-test.html` in your browser  
+Open `tin-test.html` in your browser  
 or try the hosted demo 👉🏻 
-[Card Validator Test](https://yvancg.github.io/validators/is-card-safe/card-test.html)
+[Card Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
 
 ---
 
 ## 🛠 Development
 
-This module is standalone. Copy `card.js` into your project.  
+This module is standalone. Copy `tin.js` into your project.  
 No `npm install` or build step required.
 
 ---
 
 ## 🔒 Notes
 
-Do not log full PANs in production. Mask when necessary (e.g. `**** **** **** 1111`).
+TINs, SSNs, and EINs are sensitive data.
+Never log or transmit them in plaintext outside secure environments.
 
 ---
 
