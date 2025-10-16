@@ -19,7 +19,7 @@ lightweight content moderation.
 - ✅ Safe comment stripping and whitespace collapse
 - ✅ No AST, no build step, no dependencies
 - ✅ Browser and Node compatible
-- 🪶 ~2 KB minified
+- [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
 
 ## Usage
 
