@@ -1,66 +1,53 @@
-// scripts/bench.mjs
-import fs from 'node:fs';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { writeFileSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
 
-const ROOT = process.cwd();
-const OUTDIR = path.join(ROOT, 'bench');
-fs.mkdirSync(OUTDIR, { recursive: true });
+// --- Import targets explicitly to avoid discovery misses ---
+import { minifyJS }     from '../is-minify/minify.js';
+import { isUrlSafe }    from '../is-url-safe/url.js';
+import { validatePhone }from '../is-phone-e164/phone.js';
+import { isEmail }      from '../is-email-safe/email.js';
+import { isIbanSafe }   from '../is-iban-safe/iban.js';
+import { validateCard } from '../is-card-safe/card.js';
 
-// 1) Fixed mapping to preserve file names
-const TARGETS = [
-  { file: 'is-card-safe/card.js',   export: 'validateCard', out: 'card.json',   sample: '4111111111111111', iters: 1200 },
-  { file: 'is-email-safe/email.js', export: 'isEmailSafe',  out: 'email.json',  sample: 'user.name+tag@example.co', iters: 15000 },
-  { file: 'is-iban-safe/iban.js',   export: 'isIbanSafe',   out: 'iban.json',   sample: 'DE44500105175407324931', iters: 400 },
-  { file: 'is-minify/minify.js',    export: 'minifyJS',     out: 'minify.json', sample: 'function x () { return 1 + 2 ; }', iters: 2000 },
-  { file: 'is-phone-e164/phone.js', export: 'isPhoneE164',  out: 'phone.json',  sample: '+12025550123', iters: 8000 },
-  { file: 'is-url-safe/url.js',     export: 'isUrlSafe',    out: 'url.json',    sample: 'https://example.com/path?q=1', iters: 15000 },
+function bench(fn, input, iters) {
+  // warmup
+  for (let i = 0; i < Math.min(100, iters); i++) fn(input);
+  const t0 = performance.now();
+  for (let i = 0; i < iters; i++) fn(input);
+  const ms = performance.now() - t0;
+  const ops = Math.round(iters / (ms / 1000));
+  return ops;
+}
+
+const targets = [
+  { name: 'minify', fn: () => minifyJS('function x(){return 42}/*c*/'), iters: 2000 },
+  { name: 'url',    fn: () => isUrlSafe('https://example.com?q=1'),     iters: 20000 },
+  { name: 'email',  fn: () => isEmail('user@example.com'),              iters: 15000 },
+  { name: 'iban',   fn: () => isIbanSafe('DE44500105175407324931'),     iters: 400 },
+  { name: 'phone',  fn: () => validatePhone('+12025550123'),            iters: 10000 },
+  { name: 'card',   fn: () => validateCard('4111111111111111'),         iters: 800 },
 ];
 
-function badge(label, message) {
-  return { schemaVersion: 1, label, message, color: 'informational' };
-}
-
-async function bench(fn, input, iters) {
-  const warm = Math.min(100, Math.max(10, Math.floor(iters / 20)));
-  for (let i = 0; i < warm; i++) {
-    const r = fn(input);
-    if (r && typeof r.then === 'function') await r;
-  }
-  const t0 = performance.now();
-  for (let i = 0; i < iters; i++) {
-    const r = fn(input);
-    if (r && typeof r.then === 'function') await r;
-  }
-  const ms = performance.now() - t0;
-  return Math.max(1, Math.round(iters / (ms / 1000)));
-}
-
-for (const t of TARGETS) {
-  const abs = path.join(ROOT, t.file);
-  if (!fs.existsSync(abs)) {
-    console.warn(`skip: ${t.file} not found`);
-    continue;
-  }
-  let mod;
+let wrote = 0;
+for (const t of targets) {
   try {
-    mod = await import(pathToFileURL(abs).href);
+    const ops = bench(t.fn, undefined, t.iters);
+    const json = {
+      schemaVersion: 1,
+      label: 'throughput',
+      message: `${ops.toLocaleString()} ops/s`,
+      color: 'informational'
+    };
+    writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
+    wrote++;
   } catch (e) {
-    console.error(`import failed: ${t.file} → ${e?.message || e}`);
-    continue;
+    const json = {
+      schemaVersion: 1,
+      label: 'throughput',
+      message: 'error',
+      color: 'red'
+    };
+    writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
   }
-  const fn = mod[t.export];
-  if (typeof fn !== 'function') {
-    console.warn(`skip: ${t.file} missing export ${t.export}`);
-    continue;
-  }
-
-  const ops = await bench(fn, t.sample, t.iters);
-  const data = badge(t.export, `${ops} ops/s`);
-  const outPath = path.join(OUTDIR, t.out);
-  fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
-  console.log(`wrote bench/${t.out} (${data.message})`);
 }
-
-console.log('bench complete');
+if (!wrote) process.exit(1);
