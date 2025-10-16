@@ -1,14 +1,12 @@
+# .github/workflows/bench.yml
 name: bench
 on:
   push:
     branches: [ main ]
     paths:
-      - 'is-*/**/*.js'
-      - 'bench/**'
-      - '.github/workflows/bench.yml'
-
-permissions:
-  contents: write
+      - 'is-*/**.js'
+      - 'bench/bench.mjs'
+  workflow_dispatch:
 
 jobs:
   bench:
@@ -16,12 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Run benchmarks
-        run: node bench/bench.js
-      - name: Commit results
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update benchmark badges"
-          file_pattern: bench/*.json
+        with: { node-version: 20 }
+      - name: Run benches
+        run: node bench/bench.mjs
+      - name: Commit bench json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add bench/*.json
+          git commit -m "chore(bench): update bench json" || echo "no changes"
+          git push
