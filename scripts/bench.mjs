@@ -11,7 +11,7 @@ import { validateCard } from '../is-card-safe/card.js';
 import { isJsonSafe }   from '../is-json-safe/json.js';
 import { validateTIN }  from '../is-us-tin-safe/tin.js';
 import { isIpSafe }     from '../is-ip-safe/ip.js';
-import { isVatSafe }   from '../is-vat-safe/vat.js';
+import { isVatSafe }    from '../is-vat-safe/vat.js';
 
 function bench(fn, input, iters) {
   // warmup
