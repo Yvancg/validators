@@ -12,6 +12,7 @@ import { isJsonSafe }   from '../is-json-safe/json.js';
 import { validateTIN }  from '../is-us-tin-safe/tin.js';
 import { isIpSafe }     from '../is-ip-safe/ip.js';
 import { isVatSafe }    from '../is-vat-safe/vat.js';
+import { validatePassword } from './is-password-safe/password.js';
 
 function bench(fn, input, iters) {
   // warmup
@@ -34,6 +35,7 @@ const targets = [
   { name: 'tin',    fn: () => validateTIN('12-3456789'),                        iters: 10000 },
   { name: 'ip',     fn: () => isIpSafe('192.168.0.1'),                          iters: 20000 },
   { name: 'vat',    fn: () => isVatSafe('DE123456789'),                         iters: 12000 },
+  { name: 'password', fn: () => validatePassword('Aj4?mX9^kL3!yZ'), 						iters: 8000 },
 ];
 
 let wrote = 0;
