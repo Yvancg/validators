@@ -32,6 +32,10 @@ Available modules:
   [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
   [![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
 
+- **is-password-safe** — Password strength and safety validator (entropy, sequences, dictionary words, and repetition checks).  
+  [![password gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/password.js.json)](./metrics/password.js.json)
+  [![password ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/password.json)](./bench/password.json)
+
 - **is-phone-e164** — E.164 international phone number validator with normalization.  
   [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
   [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
@@ -98,6 +102,7 @@ import { isIbanSafe } from './is-iban-safe/iban.js';
 import { isIpSafe } from './is-ip-safe/ip.js';
 import { isJsonSafe } from './is-json-safe/json.js';
 import { minifyJS, minifyCSS } from './is-minify/minify.js';
+import { validatePassword } from './is-password-safe/password.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
 import { validateITIN } from './is-us-tin-safe/tin.js';
@@ -110,9 +115,10 @@ console.log(isIpSafe('192.168.0.1'));                       // true
 console.log(isJsonSafe('{"user":"alice","id":123}'));       // true
 console.log(minifyJS('function x () { return 1 + 2 ; }'));  // 'function x(){return 1+2;}'
 console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}'
+console.log(validatePassword('Aj4?mX9^kL3!yZ'));						 // { ok: true, score: 3, entropyBits: 88, ... }
 console.log(isPhoneE164('+12025550123'));                   // true
 console.log(isUrlSafe('https://example.com'));              // true
-console.log(validateITIN('12-3456789'));                   // { ok: true, type: 'ein', ... }
+console.log(validateITIN('12-3456789'));                    // { ok: true, type: 'ein', ... }
 console.log(isVatSafe('DE123456789'));                      // { ok: true, country: 'DE', ... }
 ```
 
@@ -130,6 +136,7 @@ validators/
   ├─ is-ip-safe/
   ├─ is-json-safe/
   ├─ is-minify/
+  ├─ is-password-safe/
   ├─ is-phone-e164/
   ├─ is-url-safe/
   ├─ is-us-tin-safe/
