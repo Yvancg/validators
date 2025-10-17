@@ -104,9 +104,6 @@ validatePassword(password: string, opts?: {
 ## 🧪 Example (`test.html`)
 
 ```html
-## 🧪 Example (`password-test.html`)
-
-```html
 <!doctype html>
 <html>
   <body>
