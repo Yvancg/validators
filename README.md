@@ -69,6 +69,7 @@ You can try each validator interactively in your browser:
 - [IP Validator Test](https://yvancg.github.io/validators/is-ip-safe/ip-test.html)
 - [JSON Validator Test](https://yvancg.github.io/validators/is-json-safe/json-test.html)
 - [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
+- [Password Validator Test](https://yvancg.github.io/validators/is-password-safe/password-test.html)
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 - [US TIN Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
