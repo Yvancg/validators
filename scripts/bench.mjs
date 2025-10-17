@@ -1,18 +1,18 @@
-import { writeFileSync } from 'node:fs';
-import { performance }   from 'node:perf_hooks';
+import { writeFileSync } 		from 'node:fs';
+import { performance }   		from 'node:perf_hooks';
 
 // --- Import targets explicitly to avoid discovery misses ---
-import { minifyJS }     from '../is-minify/minify.js';
-import { isUrlSafe }    from '../is-url-safe/url.js';
-import { validatePhone }from '../is-phone-e164/phone.js';
-import { isEmail }      from '../is-email-safe/email.js';
-import { isIbanSafe }   from '../is-iban-safe/iban.js';
-import { validateCard } from '../is-card-safe/card.js';
-import { isJsonSafe }   from '../is-json-safe/json.js';
-import { validateTIN }  from '../is-us-tin-safe/tin.js';
-import { isIpSafe }     from '../is-ip-safe/ip.js';
-import { isVatSafe }    from '../is-vat-safe/vat.js';
-import { validatePassword } from './is-password-safe/password.js';
+import { minifyJS }     			from '../is-minify/minify.js';
+import { isUrlSafe }    			from '../is-url-safe/url.js';
+import { validatePhone }			from '../is-phone-e164/phone.js';
+import { isEmail }      			from '../is-email-safe/email.js';
+import { isIbanSafe }   			from '../is-iban-safe/iban.js';
+import { validateCard } 			from '../is-card-safe/card.js';
+import { isJsonSafe }   			from '../is-json-safe/json.js';
+import { validateTIN }  			from '../is-us-tin-safe/tin.js';
+import { isIpSafe }     			from '../is-ip-safe/ip.js';
+import { isVatSafe }    			from '../is-vat-safe/vat.js';
+import { validatePassword } 	from '../is-password-safe/password.js';
 
 function bench(fn, input, iters) {
   // warmup
