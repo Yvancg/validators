@@ -50,6 +50,7 @@ This policy applies to all modules in the **Validators** repository:
 - `is-minify`
 - `is-phone-e164`
 - `is-url-safe`
+-  etc
 
 ---
 
