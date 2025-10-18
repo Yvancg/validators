@@ -74,7 +74,7 @@ Each page loads its respective module and allows interactive validation.
 
 ## Install
 
-npm i @yvancg/validators  # or per-module packages when published
+`npm i @yvancg/validators`  # or per-module packages when published
 
 ## API Guarantees
 
