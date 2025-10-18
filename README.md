@@ -28,10 +28,6 @@ Available modules:
   [![json gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/json.js.json)](./metrics/json.js.json)
   [![json ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/json.json)](./bench/json.json)
 
-- **is-minify** — Safe, dependency-free JavaScript and CSS minifier for browser and Node.  
-  [![minify gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/minify.js.json)](./metrics/minify.js.json)
-  [![minify ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/minify.json)](./bench/minify.json)
-
 - **is-password-safe** — Password strength and safety validator (entropy, sequences, dictionary words, and repetition checks).  
   [![password gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/password.js.json)](./metrics/password.js.json)
   [![password ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/password.json)](./bench/password.json)
@@ -68,7 +64,6 @@ You can try each validator interactively in your browser:
 - [IBAN Validator Test](https://yvancg.github.io/validators/is-iban-safe/iban-test.html)
 - [IP Validator Test](https://yvancg.github.io/validators/is-ip-safe/ip-test.html)
 - [JSON Validator Test](https://yvancg.github.io/validators/is-json-safe/json-test.html)
-- [Minification Test](https://yvancg.github.io/validators/is-minify/minify-test.html)
 - [Password Validator Test](https://yvancg.github.io/validators/is-password-safe/password-test.html)
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
@@ -102,7 +97,6 @@ import { isEmailSafe } from './is-email-safe/email.js';
 import { isIbanSafe } from './is-iban-safe/iban.js';
 import { isIpSafe } from './is-ip-safe/ip.js';
 import { isJsonSafe } from './is-json-safe/json.js';
-import { minifyJS, minifyCSS } from './is-minify/minify.js';
 import { validatePassword } from './is-password-safe/password.js';
 import { isPhoneE164 } from './is-phone-e164/phone.js';
 import { isUrlSafe } from './is-url-safe/url.js';
@@ -114,8 +108,6 @@ console.log(isEmailSafe('user@example.com'));               // true
 console.log(isIbanSafe('DE44500105175407324931'))           // { ok: true, ... }
 console.log(isIpSafe('192.168.0.1'));                       // true
 console.log(isJsonSafe('{"user":"alice","id":123}'));       // true
-console.log(minifyJS('function x () { return 1 + 2 ; }'));  // 'function x(){return 1+2;}'
-console.log(minifyCSS('body { color : red ; }'));           // 'body{color:red;}'
 console.log(validatePassword('Aj4?mX9^kL3!yZ'));						 // { ok: true, score: 3, entropyBits: 88, ... }
 console.log(isPhoneE164('+12025550123'));                   // true
 console.log(isUrlSafe('https://example.com'));              // true
@@ -136,7 +128,6 @@ validators/
   ├─ is-iban-safe/
   ├─ is-ip-safe/
   ├─ is-json-safe/
-  ├─ is-minify/
   ├─ is-password-safe/
   ├─ is-phone-e164/
   ├─ is-url-safe/
