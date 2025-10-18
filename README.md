@@ -123,6 +123,7 @@ validators/
   │   └─ FUNDING.yml
   ├─ LICENSE
   ├─ README.md
+  ├─ SECURITY.md
   ├─ is-card-safe/
   ├─ is-email-safe/
   ├─ is-iban-safe/
