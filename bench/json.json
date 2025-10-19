@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "json ops/s",
-  "message": "261,218",
+  "label": "speed",
+  "message": "243,007 ops/s",
   "color": "blue"
 }

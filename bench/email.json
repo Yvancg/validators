@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "email ops/s",
-  "message": "896,237",
-  "color": "green"
+  "label": "speed",
+  "message": "1,088,946 ops/s",
+  "color": "brightgreen"
 }

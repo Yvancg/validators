@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "tin ops/s",
-  "message": "334,682",
+  "label": "speed",
+  "message": "317,683 ops/s",
   "color": "green"
 }

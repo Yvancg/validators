@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "vat ops/s",
-  "message": "1,377,044",
+  "label": "speed",
+  "message": "1,244,888 ops/s",
   "color": "brightgreen"
 }

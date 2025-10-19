@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "phone ops/s",
-  "message": "1,782,545",
+  "label": "speed",
+  "message": "1,672,602 ops/s",
   "color": "brightgreen"
 }
