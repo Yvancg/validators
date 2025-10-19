@@ -2,7 +2,6 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { performance }              from 'node:perf_hooks';
 
 // --- Import targets explicitly to avoid discovery misses ---
-import { minifyJS }     			from '../is-minify/minify.js';
 import { isUrlSafe }    			from '../is-url-safe/url.js';
 import { validatePhone }			from '../is-phone-e164/phone.js';
 import { isEmail }      			from '../is-email-safe/email.js';
@@ -23,7 +22,6 @@ function bench(fn, iters) {
 }
 
 const targets = [
-  { name: 'minify', fn: () => minifyJS('function x(){return 42}/*c*/'),         iters: 2000 },
   { name: 'url',    fn: () => isUrlSafe('https://example.com?q=1'),             iters: 20000 },
   { name: 'email',  fn: () => isEmail('user@example.com'),                      iters: 15000 },
   { name: 'iban',   fn: () => isIbanSafe('DE44500105175407324931'),             iters: 400 },
@@ -46,14 +44,14 @@ for (const t of targets) {
                 : 'lightgrey';
     const json = {
       schemaVersion: 1,
-      label: `${t.name} ops/s`,
-      message: ops.toLocaleString(),
+      label: 'speed',
+      message: `${ops.toLocaleString()} ops/s`,
       color
     };
     writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
     wrote++;
   } catch {
-    const json = { schemaVersion: 1, label: `${t.name} ops/s`, message: 'error', color: 'red' };
+    const json = { schemaVersion: 1, label: 'speed', message: 'error', color: 'red' };
     writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
   }
 }
