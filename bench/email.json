@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "throughput",
-  "message": "395,904 ops/s",
-  "color": "informational"
+  "label": "email ops/s",
+  "message": "896,237",
+  "color": "green"
 }

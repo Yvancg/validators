@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "throughput",
-  "message": "1,254,401 ops/s",
-  "color": "informational"
+  "label": "vat ops/s",
+  "message": "1,377,044",
+  "color": "brightgreen"
 }

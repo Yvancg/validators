@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "throughput",
-  "message": "21,535 ops/s",
-  "color": "informational"
+  "label": "iban ops/s",
+  "message": "38,590",
+  "color": "lightgrey"
 }
