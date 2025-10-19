@@ -47,9 +47,13 @@ This policy applies to all modules in the **Validators** repository:
 - `is-card-safe`
 - `is-email-safe`
 - `is-iban-safe`
-- `is-minify`
+- `is-ip-safe`
+- `is-json-safe`
+- `is-password-safe`
 - `is-phone-e164`
 - `is-url-safe`
+- `is-us-tin-safe`
+- `is-vat-safe`
 -  etc
 
 ---
