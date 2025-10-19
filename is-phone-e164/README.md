@@ -1,4 +1,5 @@
 # is-phone-e164
+
 [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
   [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
 
@@ -8,10 +9,12 @@ Lightweight, auditable, and safe to embed directly in web or backend code.
 ---
 
 ## 🚀 Why
+
 Most phone validation libraries are heavy or depend on outdated regex sets.  
 `phone-e164` is a single file — zero dependencies, zero runtime risk.
 
 ## 🌟 Features
+
 - ✅ Validates and normalizes international phone numbers in E.164 format  
 - ✅ Removes spaces, dashes, parentheses, and other common formatting  
 - ✅ Detects invalid or incomplete country codes  
@@ -19,6 +22,7 @@ Most phone validation libraries are heavy or depend on outdated regex sets.
 - ✅ Zero dependencies — pure ES module  
 
 ## 📦 Usage
+
 ```bash
 normalizePhone(' (415) 555-0123 '); // "+4155550123"
 isE164('+4155550123'); // true
@@ -28,6 +32,7 @@ validatePhone('415-555-0123'); // true (normalizes to +4155550123)
 ---
 
 ## 🧩 Validation rules
+
 - Total length ≤ 254  
 - Local part ≤ 64  
 - ASCII-only (no UTF-8 emoji or accents)  
@@ -84,18 +89,21 @@ Returns true only if the normalized result passes isE164.
 ---
 
 ## 🧪 Browser test
+
 Clone the repo, open `phone-test.html` — interactive test in your browser  
 or click 👉🏻 [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
 
 ---
 
 ## 🛠 Development
+
 This module is standalone. You can copy `phone.js` into your own project.  
 No `npm install` or build step required.
 
 ---
 
 ## 🪪 License
+
 MIT License  
 
 Copyright (c) 2025 **Y Consulting LLC**
@@ -125,10 +133,13 @@ THE SOFTWARE.
 If this library helped you, consider sponsoring its maintenance.
 
 ### GitHub Sponsors
+
 [👉 Sponsor me on GitHub](https://github.com/sponsors/yvancg)
 
 ### Buy Me a Coffee
+
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
-### Custom link
-[💸 Direct contribution](https://wise.com/pay/me/yvanc7)
+### Direct Contribution
+
+[💸 Direct Contribution via Paypal](https://paypal.me/ComicStylePortrait)
