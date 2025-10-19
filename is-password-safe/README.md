@@ -188,5 +188,6 @@ If this library helped you, consider sponsoring its maintenance.
 
 [☕ Support via BuyMeACoffee](https://buymeacoffee.com/yconsulting)
 
-### Custom link
-[💸 Direct contribution](https://wise.com/pay/me/yvanc7)
+### Direct Contribution
+
+[💸 Direct Contribution via Paypal](https://paypal.me/ComicStylePortrait)
