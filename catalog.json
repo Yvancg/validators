@@ -1,8 +1,9 @@
 {
+  "version": "2025-10-20",
   "tools": [
     {
       "name": "is-email-safe",
-      "description": "Validate email format",
+      "description": "Validates that a string is a safe, correctly formatted email address.",
       "input_schema": {
         "type": "object",
         "properties": { "email": { "type": "string" } },
@@ -19,13 +20,129 @@
     },
     {
       "name": "is-url-safe",
-      "description": "Validate URL format",
+      "description": "Checks whether a URL is syntactically valid and well-formed.",
       "input_schema": {
         "type": "object",
         "properties": { "url": { "type": "string" } },
         "required": ["url"]
       },
       "rule": { "type": "builtin", "name": "isURL", "field": "url" }
+    },
+    {
+      "name": "is-ip-safe",
+      "description": "Validates IPv4 or IPv6 address formatting.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "ip": { "type": "string" } },
+        "required": ["ip"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "ip",
+        "pattern": "^(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\\.|$)){4}$",
+        "ok_reason": "valid_ipv4",
+        "fail_reason": "invalid_ip"
+      }
+    },
+    {
+      "name": "is-phone-e164",
+      "description": "Validates international phone numbers in E.164 format (+countrycode and up to 15 digits).",
+      "input_schema": {
+        "type": "object",
+        "properties": { "phone": { "type": "string" } },
+        "required": ["phone"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "phone",
+        "pattern": "^\\+[1-9]\\d{1,14}$",
+        "ok_reason": "valid",
+        "fail_reason": "invalid_e164"
+      }
+    },
+    {
+      "name": "is-json-safe",
+      "description": "Checks whether a string contains valid JSON.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "json": { "type": "string" } },
+        "required": ["json"]
+      },
+      "rule": { "type": "builtin", "name": "isJSON", "field": "json" }
+    },
+    {
+      "name": "is-password-safe",
+      "description": "Validates a password for minimum length and complexity (letters, digits, and symbols).",
+      "input_schema": {
+        "type": "object",
+        "properties": { "password": { "type": "string" } },
+        "required": ["password"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "password",
+        "pattern": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+        "ok_reason": "strong",
+        "fail_reason": "weak"
+      }
+    },
+    {
+      "name": "is-iban-safe",
+      "description": "Checks if a string matches the general IBAN structure.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "iban": { "type": "string" } },
+        "required": ["iban"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "iban",
+        "pattern": "^[A-Z]{2}\\d{2}[A-Z0-9]{11,30}$",
+        "ok_reason": "valid",
+        "fail_reason": "invalid_iban"
+      }
+    },
+    {
+      "name": "is-vat-safe",
+      "description": "Checks if a string matches a generic EU VAT number pattern (country code + digits).",
+      "input_schema": {
+        "type": "object",
+        "properties": { "vat": { "type": "string" } },
+        "required": ["vat"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "vat",
+        "pattern": "^[A-Z]{2}[0-9A-Z]{8,12}$",
+        "ok_reason": "valid",
+        "fail_reason": "invalid_vat"
+      }
+    },
+    {
+      "name": "is-us-tin-safe",
+      "description": "Validates a US Taxpayer Identification Number (SSN or EIN).",
+      "input_schema": {
+        "type": "object",
+        "properties": { "tin": { "type": "string" } },
+        "required": ["tin"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "tin",
+        "pattern": "^(\\d{3}-\\d{2}-\\d{4}|\\d{2}-\\d{7})$",
+        "ok_reason": "valid",
+        "fail_reason": "invalid_tin"
+      }
+    },
+    {
+      "name": "is-card-safe",
+      "description": "Performs a simple Luhn check for credit card numbers.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "number": { "type": "string" } },
+        "required": ["number"]
+      },
+      "rule": { "type": "builtin", "name": "isLuhnValid", "field": "number" }
     }
   ]
 }
