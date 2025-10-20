@@ -1,0 +1,31 @@
+{
+  "tools": [
+    {
+      "name": "is-email-safe",
+      "description": "Validate email format",
+      "input_schema": {
+        "type": "object",
+        "properties": { "email": { "type": "string" } },
+        "required": ["email"]
+      },
+      "rule": {
+        "type": "regex",
+        "field": "email",
+        "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+        "flags": "i",
+        "ok_reason": "valid",
+        "fail_reason": "invalid_format"
+      }
+    },
+    {
+      "name": "is-url-safe",
+      "description": "Validate URL format",
+      "input_schema": {
+        "type": "object",
+        "properties": { "url": { "type": "string" } },
+        "required": ["url"]
+      },
+      "rule": { "type": "builtin", "name": "isURL", "field": "url" }
+    }
+  ]
+}
