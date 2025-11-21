@@ -17,13 +17,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0          # important for rebase
 
       - name: Compute gzip sizes
         run: |
           set -euo pipefail
           mkdir -p metrics
 
-          # List JS files for visibility
           echo "JS files to measure:"
           find . -type f -name "*.js" ! -path "*/node_modules/*" -print
 
@@ -36,7 +36,6 @@ jobs:
 
             json="{\"schemaVersion\":1,\"label\":\"gzip\",\"message\":\"${size}\",\"color\":\"blue\"}"
 
-            # Only write if content changed to avoid empty commits
             if [ ! -f "$out" ] || [ "$json" != "$(cat "$out" 2>/dev/null)" ]; then
               echo "$json" > "$out"
               echo "→ $f → $out → $size"
@@ -54,12 +53,19 @@ jobs:
         if: success()
         run: |
           set -e
+
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add metrics
+
+          # Make sure local main is up to date
+          git fetch origin main
+          git pull --rebase origin main || true
+
+          git add metrics || true
+
           if git diff --cached --quiet; then
             echo "Nothing to commit."
           else
-            git commit -m "chore: update gzip size metrics"
-            git push
+            git commit -m "chore: update gzip size metrics" || true
+            git push origin HEAD:main
           fi
