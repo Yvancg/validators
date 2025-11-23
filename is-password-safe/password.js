@@ -1,8 +1,9 @@
 // is-password-safe/password.js
+// O(n) scans. No innerHTML anywhere in demos.
 
-const LOWER  = /[a-z]/;
-const UPPER  = /[A-Z]/;
-const DIGIT  = /[0-9]/;
+const LOWER = /[a-z]/;
+const UPPER = /[A-Z]/;
+const DIGIT = /[0-9]/;
 const SYMBOL = /[^A-Za-z0-9]/;
 
 const DEFAULT_DICT = new Set([
@@ -10,29 +11,11 @@ const DEFAULT_DICT = new Set([
   'admin','welcome','iloveyou','monkey','dragon'
 ]);
 
-// Precompute a normalized default dictionary set for substring checks
-const DEFAULT_DICT_NORM = new Set(
-  [...DEFAULT_DICT].map(s => s.toLowerCase())
-);
-
-// Keyboard rows are constants, no need to recreate inside functions
-const KEYBOARD_ROWS = [
-  'abcdefghijklmnopqrstuvwxyz',
-  'qwertyuiop',
-  'asdfghjkl',
-  'zxcvbnm',
-  '0123456789'
-];
-const KEYBOARD_ROWS_REV = KEYBOARD_ROWS.map(
-  row => [...row].reverse().join('')
-);
-
 const DEFAULTS = {
   minLength: 12,
   maxLength: 1024,
   minEntropy: 60, // bits
   requireSets: ['lower','upper','digit','symbol'],
-  // Keep as array for user facing config, we will handle it internally
   dictionaries: [...DEFAULT_DICT],
 };
 
@@ -42,8 +25,6 @@ export function validatePassword(password, opts = {}) {
 
   const reasons = [];
   const suggestions = [];
-
-  // Single pass regex tests are fine here, pw is small
   const sets = {
     lower: LOWER.test(password),
     upper: UPPER.test(password),
@@ -51,35 +32,24 @@ export function validatePassword(password, opts = {}) {
     symbol: SYMBOL.test(password)
   };
 
-  const length = [...password].length; // unicode aware
+  const length = [...password].length; // unicode-aware
   if (length < cfg.minLength) reasons.push(`length < ${cfg.minLength}`);
   if (length > cfg.maxLength) reasons.push(`length > ${cfg.maxLength}`);
 
-  for (const need of cfg.requireSets) {
-    if (!sets[need]) reasons.push(`missing ${need}`);
-  }
+  for (const need of cfg.requireSets) if (!sets[need]) reasons.push(`missing ${need}`);
 
   const dictHit = isDictionaryLike(password, cfg.dictionaries);
   if (dictHit) reasons.push(`dictionary-like: ${dictHit}`);
 
-  // Compute these once and reuse in entropy calculation
-  const hasSeq = hasSequentialRun(password, 4);
-  const hasRep = hasRepeatedBlock(password, 3);
+  if (hasSequentialRun(password, 4)) reasons.push('sequential characters');
+  if (hasRepeatedBlock(password, 3)) reasons.push('repeated block');
 
-  if (hasSeq) reasons.push('sequential characters');
-  if (hasRep) reasons.push('repeated block');
-
-  const entropyBits = estimateEntropyBits(password, sets, hasSeq, hasRep);
-
-  if (entropyBits < cfg.minEntropy) {
-    reasons.push(`entropy < ${cfg.minEntropy}b`);
-  }
+  const entropyBits = estimateEntropyBits(password, sets);
+  if (entropyBits < cfg.minEntropy) reasons.push(`entropy < ${cfg.minEntropy}b`);
 
   if (reasons.length) {
     if (length < cfg.minLength) suggestions.push(`use ≥${cfg.minLength} chars`);
-    for (const s of ['lower','upper','digit','symbol']) {
-      if (!sets[s]) suggestions.push(`add ${s}`);
-    }
+    for (const s of ['lower','upper','digit','symbol']) if (!sets[s]) suggestions.push(`add ${s}`);
     if (dictHit) suggestions.push('avoid common words and keyboard patterns');
     suggestions.push('avoid sequences and repeats');
   }
@@ -103,42 +73,20 @@ export function validatePassword(password, opts = {}) {
 
 function fail(reason) {
   return {
-    ok: false,
-    score: 0,
-    entropyBits: 0,
-    length: 0,
-    sets: { lower:false, upper:false, digit:false, symbol:false },
-    reasons: [reason],
-    suggestions: ['provide a string']
+    ok: false, score: 0, entropyBits: 0, length: 0,
+    sets: {lower:false,upper:false,digit:false,symbol:false},
+    reasons: [reason], suggestions: ['provide a string']
   };
 }
 
-// Accept either the default array, a custom array, or a Set
-function isDictionaryLike(pw, dictConfig) {
-  let dict;
-
-  if (dictConfig === DEFAULTS.dictionaries) {
-    // Fast path for defaults, use precomputed normalized set
-    dict = DEFAULT_DICT_NORM;
-  } else if (dictConfig instanceof Set) {
-    // Caller provided their own Set, assume correctly normalized
-    dict = dictConfig;
-  } else {
-    // Fallback, likely a string array
-    dict = new Set(
-      dictConfig.map(s => s.toLowerCase())
-    );
-  }
-
+function isDictionaryLike(pw, dictArr) {
+  const dict = new Set(dictArr.map(s => s.toLowerCase()));
   const s = pw.toLowerCase().replace(/[^a-z0-9]/g, '');
   if (!s) return null;
   if (dict.has(s)) return s;
-
-  // Check all substrings of length 4 or more
   for (let i = 0; i <= s.length - 4; i++) {
     for (let j = i + 4; j <= s.length; j++) {
-      const sub = s.slice(i, j);
-      if (dict.has(sub)) return sub;
+      if (dict.has(s.slice(i, j))) return s.slice(i, j);
     }
   }
   return null;
@@ -147,56 +95,37 @@ function isDictionaryLike(pw, dictConfig) {
 function hasSequentialRun(pw, runLen = 4) {
   const codes = [...pw].map(ch => ch.codePointAt(0));
   let up = 1, down = 1;
-
   for (let i = 1; i < codes.length; i++) {
-    if (codes[i] === codes[i - 1] + 1) {
-      up++;
-      down = 1;
-    } else if (codes[i] === codes[i - 1] - 1) {
-      down++;
-      up = 1;
-    } else {
-      up = 1;
-      down = 1;
-    }
+    if (codes[i] === codes[i-1] + 1) { up++; down = 1; }
+    else if (codes[i] === codes[i-1] - 1) { down++; up = 1; }
+    else { up = 1; down = 1; }
     if (up >= runLen || down >= runLen) return true;
   }
-
+  const rows = ['abcdefghijklmnopqrstuvwxyz','qwertyuiop','asdfghjkl','zxcvbnm','0123456789'];
   const lower = pw.toLowerCase();
-  for (const row of KEYBOARD_ROWS) {
-    if (hasRunInRow(lower, row, runLen)) return true;
-  }
-  for (const row of KEYBOARD_ROWS_REV) {
-    if (hasRunInRow(lower, row, runLen)) return true;
+  for (const row of rows) {
+    if (hasRunInRow(lower, row, runLen) || hasRunInRow(lower, [...row].reverse().join(''), runLen)) return true;
   }
   return false;
 }
-
 function hasRunInRow(s, row, n) {
-  for (let i = 0; i <= row.length - n; i++) {
-    if (s.includes(row.slice(i, i + n))) return true;
-  }
+  for (let i = 0; i <= row.length - n; i++) if (s.includes(row.slice(i, i+n))) return true;
   return false;
 }
 
 function hasRepeatedBlock(pw, minBlock = 3) {
   const s = [...pw].join('');
-  // aaa type repeats
-  for (let i = 2; i < s.length; i++) {
-    if (s[i] === s[i - 1] && s[i - 1] === s[i - 2]) return true;
-  }
-  // abab, abcabc type repeats
+  for (let i = 2; i < s.length; i++) if (s[i] === s[i-1] && s[i-1] === s[i-2]) return true;
   for (let k = 2; k <= 4; k++) {
-    for (let i = 0; i + 2 * k <= s.length; i++) {
-      const a = s.slice(i, i + k);
-      const b = s.slice(i + k, i + 2 * k);
+    for (let i = 0; i + 2*k <= s.length; i++) {
+      const a = s.slice(i, i+k), b = s.slice(i+k, i+2*k);
       if (a === b && k >= minBlock) return true;
     }
   }
   return false;
 }
 
-function estimateEntropyBits(pw, sets, hasSeq, hasRep) {
+function estimateEntropyBits(pw, sets) {
   let pool = 0;
   if (sets.lower) pool += 26;
   if (sets.upper) pool += 26;
@@ -205,13 +134,9 @@ function estimateEntropyBits(pw, sets, hasSeq, hasRep) {
   if (!pool) return 0;
 
   let bits = [...pw].length * Math.log2(pool);
-
-  // Reuse computed results instead of rescanning
-  if (hasSeq) bits -= 10;
-  if (hasRep) bits -= 10;
-
-  const trimmed = pw.replace(/[^A-Za-z]/g, '').toLowerCase();
+  if (hasSequentialRun(pw, 4)) bits -= 10;
+  if (hasRepeatedBlock(pw, 3)) bits -= 10;
+  const trimmed = pw.replace(/[^A-Za-z]/g,'').toLowerCase();
   if (trimmed && DEFAULT_DICT.has(trimmed)) bits -= 12;
-
   return Math.max(0, bits);
 }
