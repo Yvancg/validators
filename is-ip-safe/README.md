@@ -11,7 +11,7 @@ Safe from ReDoS, works in browsers, Node.js, and edge runtimes.
 ## 🚀 Why
 
 Most IP validators rely on complex regexes vulnerable to catastrophic backtracking.  
-`is-ip-safe` performs structural validation in a predictable, constant-time way.
+`is-ip-safe` performs structural validation in a simple structural checks without a large parsing library.
 
 ---
 
@@ -37,7 +37,7 @@ isIpSafe('2001:0db8:85a3::8a2e:0370:7334');
 // → { ok: true, version: 6, issues: [] }
 
 isIpSafe('999.1.1.1');
-// → { ok: false, version: 4, issues: ['out_of_range'] }
+// → { ok: false, version: 4, issues: ['invalid_address'] }
 
 isIPv4('192.168.0.1'); // → true
 isIPv6('fe80::1');     // → true
@@ -45,54 +45,16 @@ isIPv6('fe80::1');     // → true
 
 ---
 
-## 🧩 Validation rules
+## Validation rules
+- IPv4: exactly four decimal octets, each from 0 to 255, with no leading zeros.
+- IPv6: exactly eight 16-bit groups, or one `::` replacing at least one group. IPv4-embedded forms are supported.
+- Whitespace is trimmed at the ends; malformed compression and invalid characters are rejected.
+- Validation checks address syntax, not whether the address is routable or publicly reachable.
 
-### IPv4 ###
+## API
+`isIpSafe(input)` returns `{ ok, version, issues }`, where `version` is `4`, `6`, or `null`. Known malformed versions report `['invalid_address']`; an empty input reports `['empty']`.
 
-- Must contain exactly 4 numeric segments, separated by dots (.)
-- Each segment must be an integer between 0 and 255
-- No leading zeros (e.g. 01 is invalid)
-- Only digits allowed — no letters or special characters
-
-### IPv6 ###
-
-- Must contain 3–8 groups separated by colons (:)
-- Each group must contain 1–4 hexadecimal characters (0-9, a-f, A-F)
-- Supports compressed notation (::) exactly once per address
-- Rejects invalid characters or too many segments
-- Handles mixed uppercase/lowercase safely
-
-### Common rules ###
-
-- Input is trimmed before validation
-- Empty or whitespace-only strings are invalid
-- No regular-expression backtracking (safe for untrusted input)
-
----
-
-## 🧠 API
-
-### `isIpSafe(raw: string): boolean`  
-
-Returns `true` if the given string is a valid IPv4 **or** IPv6 address.
-
-### `isIPv4(raw: string): boolean`  
-
-Returns `true` only if the input is a valid IPv4 address in the form `A.B.C.D`,  
-where each segment is an integer between `0` and `255` and has **no leading zeros**.
-
-### `isIPv6(raw: string): boolean`  
-
-Returns `true` only if the input is a valid IPv6 address, supporting a single `::` compression,  
-with each group containing 1–4 hexadecimal characters (`0–9`, `a–f`, `A–F`).
-
-### `normalizeIp(raw: string): string`  
-
-Returns a normalized IP string or an empty string if invalid.  
-- IPv4: removes extra spaces and leading zeros  
-- IPv6: converts to lowercase and applies minimal compression rules
-
----
+`isIPv4(input)` and `isIPv6(input)` return booleans. There is no `normalizeIp` export.
 
 ## 🧪 Example (`test.html`)
 
@@ -136,7 +98,7 @@ No `npm install` or build step required.
 
 ## 🔒 Notes
 
-Do not log full PANs in production. Mask when necessary (e.g. `**** **** **** 1111`).
+Use syntax validation only. This utility does not check routing, ownership, or network accessibility.
 
 ---
 
