@@ -27,10 +27,10 @@ export function isJsonSafe(raw, opts = {}) {
   const o = { ...DEFAULTS, ...opts };
   const issues = [];
   const s = String(raw ?? "");
-  const bytes = s.length;
+  const bytes = new TextEncoder().encode(s).length;
 
   if (!s.trim()) return { ok: false, issues: ["empty"], bytes, depth: 0, keys: 0 };
-  if (bytes > o.maxBytes) issues.push("too_large");
+  if (bytes > o.maxBytes) return { ok: false, issues: ["too_large"], bytes, depth: 0, keys: 0 };
 
   let value;
   try {
