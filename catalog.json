@@ -46,6 +46,16 @@
       }
     },
     {
+      "name": "is-iso-date-safe",
+      "description": "Strict ISO Gregorian date (YYYY-MM-DD) validation, including leap years.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "date": { "type": "string" } },
+        "required": ["date"]
+      },
+      "rule": { "type": "builtin", "name": "isIsoDateSafe", "field": "date" }
+    },
+    {
       "name": "is-ip-safe",
       "description": "IPv4 or IPv6 address validation.",
       "input_schema": {
@@ -96,6 +106,19 @@
         "ok_reason": "valid",
         "fail_reason": "invalid_e164"
       }
+    },
+    {
+      "name": "is-uuid-safe",
+      "description": "Canonical UUID syntax, RFC variant and optional version filter.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string" },
+          "version": { "type": "integer", "minimum": 1, "maximum": 8 }
+        },
+        "required": ["uuid"]
+      },
+      "rule": { "type": "builtin", "name": "isUuidSafe", "fields": ["uuid", "version"] }
     },
     {
       "name": "is-url-safe",
