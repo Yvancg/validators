@@ -19,7 +19,7 @@ Most card libraries are heavy or outdated.
 
 - ✅ Luhn (mod-10) checksum  
 - ✅ Brand detection: Visa, Mastercard, Amex, Discover, JCB, Diners, UnionPay, Maestro, MIR  
-- ✅ Normalizes input to digits-only and exposes `last4`  
+- ✅ Accepts spaces/hyphens as separators and exposes `last4`  
 - ✅ Optional allow/block brand policies  
 - ✅ Works in browsers, Node.js, and edge runtimes  
 - ✅ Zero dependencies — pure ES module
@@ -38,7 +38,7 @@ validateCard('5555 5555 5555 4444');
 // → { ok: true, normalized: '5555555555554444', brand: 'mastercard', last4: '4444', issues: [] }
 
 validateCard('1234 5678 9012 3456');
-// → { ok: false, brand: 'unknown', issues: ['luhn_failed','unknown_brand'] }
+// → { ok: false, brand: undefined, issues: ['unknown_brand', 'luhn_failed'], ... }
 
 validateCard('4111 1111 1111 1111', { allowBrands: ['mastercard'] });
 // → { ok: false, brand: 'visa', issues: ['brand_not_allowed'] }
@@ -48,10 +48,10 @@ validateCard('4111 1111 1111 1111', { allowBrands: ['mastercard'] });
 
 ## 🧩 Validation rules
 
-- Digits-only after normalization  
+- Digits with optional whitespace or hyphen separators; other characters are rejected  
 - Length 12–19 digits  
 - Luhn checksum must pass  
-- Brand recognized or reported as `unknown`  
+- Brand recognized or represented as absent (`undefined`) in the result; supports Mastercard 2221–2720 prefixes  
 - Optional `allowBrands` / `blockBrands` policy checks
 
 ---
@@ -73,8 +73,8 @@ type ValidateOpts = {
 type Result = {
   ok: boolean;
   brand?: string;         // 'visa' | 'mastercard' | 'amex' | ...
-  normalized?: string;    // digits-only PAN if ok
-  last4?: string;         // last 4 digits if ok
+  normalized?: string;    // digits-only PAN only when ok
+  last4?: string;         // last 4 characters of normalized input, even if invalid
   issues: string[];       // e.g. ['too_short','luhn_failed','unknown_brand','brand_not_allowed']
 };
 ```
