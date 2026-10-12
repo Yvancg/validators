@@ -6,7 +6,7 @@ const RX = {
   BE: /^BE0?\d{9}$/,
   BG: /^BG\d{9,10}$/,
   CY: /^CY\d{8}[A-Z]$/,
-  CZ: /^CZ\d{8,9,10}$/,
+  CZ: /^CZ\d{8,10}$/,
   DE: /^DE\d{9}$/,
   DK: /^DK\d{8}$/,
   EE: /^EE\d{9}$/,

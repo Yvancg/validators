@@ -11,22 +11,22 @@ Lightweight, auditable, and backed by the official SWIFT IBAN Registry.
 ## 🚀 Why
 
 Most IBAN libraries depend on legacy regex sets or outdated country lists.  
-`is-iban-safe` is a single-file validator that loads an up-to-date registry snapshot from SWIFT and verifies every rule natively — checksum, country length, and BBAN structure.
+`is-iban-safe` is a small validator that reads the bundled registry snapshot and verifies every rule natively — checksum, country length, and BBAN structure.
 
 ---
 
 ## 📦 Usage
 
 ```js
-import { isIbanSafe } from './is-iban-safe/iban.js';
+import { isIbanSafe } from './iban.js';
 
-isIbanSafe('DE44500105175407324931');
+await isIbanSafe('DE44500105175407324931');
 // → { ok: true, normalized: 'DE44500105175407324931', issues: [] }
 
-isIbanSafe('DE00500105175407324931');
+await isIbanSafe('DE00500105175407324931');
 // → { ok: false, issues: ['checksum_failed'] }
 
-isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
+await isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
 // → { ok: false, issues: ['country_blocked'] }
 ```
 
@@ -47,7 +47,7 @@ isIbanSafe('IR062960000000100324200001', { blockCountries: ['IR'] });
 
 ### `isIbanSafe(raw: string, options?: object): Promise<{ ok: boolean, normalized?: string, issues: string[] }>`
 
-Validates an IBAN against the official SWIFT registry.
+Validates an IBAN using the bundled registry snapshot. The function is asynchronous; keep `iban_registry_full.json` alongside `iban.js` when copying or deploying the module.
 
 **Options**
 - `allowCountries` – array of allowed ISO 3166-1 alpha-2 country codes  

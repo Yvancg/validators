@@ -80,14 +80,11 @@ function fail(reason) {
 }
 
 function isDictionaryLike(pw, dictArr) {
-  const dict = new Set(dictArr.map(s => s.toLowerCase()));
   const s = pw.toLowerCase().replace(/[^a-z0-9]/g, '');
   if (!s) return null;
-  if (dict.has(s)) return s;
-  for (let i = 0; i <= s.length - 4; i++) {
-    for (let j = i + 4; j <= s.length; j++) {
-      if (dict.has(s.slice(i, j))) return s.slice(i, j);
-    }
+  for (const term of dictArr) {
+    const word = String(term).toLowerCase();
+    if (word.length >= 4 && s.includes(word)) return word;
   }
   return null;
 }

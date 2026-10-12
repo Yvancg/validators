@@ -11,8 +11,8 @@ Works in browser, Node.js, and edge runtimes.
 
 ## 🚀 Why
 
-Most JSON parsers assume trusted input.  
-`is-json-safe` guards against untrusted or malicious JSON by validating structure, depth, and key count — before using or storing the data.
+JSON parsing alone does not enforce application-specific structure limits.  
+`is-json-safe` guards against untrusted or malicious JSON by validating size, depth, and key count before using or storing the parsed value.
 
 ---
 
@@ -36,7 +36,7 @@ import { isJsonSafe, normalizeJson } from './json.js';
 const input = '{"user":{"name":"Ada","roles":["admin","ops"]}}';
 
 isJsonSafe(input);
-// → { ok: true, bytes: 55, depth: 2, keys: 3, issues: [] }
+// → { ok: true, bytes: <UTF-8 byte length>, depth: 3, keys: 3, issues: [], value: ... }
 
 isJsonSafe('{"__proto__":{}}');
 // → { ok: false, issues: ["blocked_key:__proto__"] }
@@ -57,7 +57,7 @@ normalizeJson(' { "x": 1, "y": 2 } ');
   - Maximum nesting depth (maxDepth)
   - Maximum total keys (maxKeys)
   - Maximum string length (maxStringLength)
-- Supports strict or relaxed validation modes via options
+- Uses UTF-8 for `bytes`/`maxBytes`; rejects oversized input before `JSON.parse`. Other limits are enforced after parsing.
 
 ---
 
@@ -134,8 +134,7 @@ No `npm install` or build step required.
 
 ## 🔒 Notes
 
-Avoid parsing untrusted JSON directly.
-Use isJsonSafe to enforce limits and detect tampering before parsing.
+Use `isJsonSafe()` to enforce configured limits. It uses native `JSON.parse` and rejects blocked keys; it does not remove or sanitize those keys. Only access `result.value` when `result.ok` is true.
 
 ---
 

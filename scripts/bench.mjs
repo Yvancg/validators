@@ -13,10 +13,10 @@ import { isIpSafe }     			from '../is-ip-safe/ip.js';
 import { isVatSafe }    			from '../is-vat-safe/vat.js';
 import { validatePassword } 	from '../is-password-safe/password.js';
 
-function bench(fn, iters) {
-  for (let i = 0; i < Math.min(100, iters); i++) fn();
+async function bench(fn, iters) {
+  for (let i = 0; i < Math.min(100, iters); i++) await fn();
   const t0 = performance.now();
-  for (let i = 0; i < iters; i++) fn();
+  for (let i = 0; i < iters; i++) await fn();
   const ms = performance.now() - t0;
   return Math.round(iters / (ms / 1000)); // ops/s
 }
@@ -37,7 +37,7 @@ const targets = [
 let wrote = 0;
 for (const t of targets) {
   try {
-    const ops = bench(t.fn, t.iters);
+    const ops = await bench(t.fn, t.iters);
     const color = ops > 1_000_000 ? 'brightgreen'
                 : ops >   300_000 ? 'green'
                 : ops >   100_000 ? 'blue'

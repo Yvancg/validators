@@ -1,10 +1,10 @@
 # Validators
 
-A collection of minimal, dependency-free, security-focused input validation helpers for modern web and edge environments.
+A collection of minimal, dependency-free, small input-validation helpers for modern web and edge environments.
 
 ## Overview
 
-**Validators** provides safe standalone, auditable modules designed to replace overcomplicated or vulnerable validation libraries. Each module focuses on a single responsibility and avoids risky features such as `eval`, regex backtracking, or URL parsing ambiguities.
+**Validators** provides standalone, auditable modules with no runtime dependencies. Each module focuses on a single responsibility and avoids risky features such as `eval`, regex backtracking, or URL parsing ambiguities.
 
 Available modules:
 
@@ -53,7 +53,7 @@ All helpers are designed for use in:
 - Node.js / Deno / Bun (import)
 - Edge runtimes (Cloudflare Workers, Vercel Edge, etc.)
 
-Each module has its own `README.md`, tests, and can be imported individually.
+Each module can be imported individually; browser demo pages and a Node regression suite are included.
 
 ## 🔗 Live Demos (GitHub Pages)
 
@@ -72,14 +72,20 @@ You can try each validator interactively in your browser:
 
 Each page loads its respective module and allows interactive validation.
 
-## Install
+## Use
+Import the individual ESM files directly. This repository does not require a package installation or build step.
 
-`npm i @yvancg/validators`  # or per-module packages when published
+Run regression tests with Node.js 22 or newer:
 
-## API Guarantees
+~~~bash
+node --experimental-default-type=module --test tests/*.test.mjs
+~~~
 
-- No eval or dynamic code.
-- Regexes fuzz-tested for catastrophic backtracking.
+## API behavior
+- `isIpSafe()`, `isJsonSafe()`, `validateCard()`, and `validateTIN()` return **result objects**, not booleans. Use their `ok` properties.
+- `isIbanSafe()` returns a **Promise** and reads `is-iban-safe/iban_registry_full.json`. Keep the JSON file next to `iban.js`.
+- JSON `maxBytes` measures UTF-8 bytes and rejects oversized input before parsing. Other structural checks happen after `JSON.parse`.
+- Card, TIN, VAT, email, and phone checks validate local format rules only; they do not verify real-world issuance or ownership.
 
 ## Design Principles
 
@@ -89,31 +95,20 @@ Each page loads its respective module and allows interactive validation.
 4. **Portability:** Works across environments without build tools.
 5. **Transparency:** Open source with no hidden telemetry or build steps.
 
-## Example Usage
-
-```js
+## Example usage
+~~~js
 import { validateCard } from './is-card-safe/card.js';
-import { isEmailSafe } from './is-email-safe/email.js';
-import { isIbanSafe } from './is-iban-safe/iban.js';
 import { isIpSafe } from './is-ip-safe/ip.js';
 import { isJsonSafe } from './is-json-safe/json.js';
-import { validatePassword } from './is-password-safe/password.js';
-import { isPhoneE164 } from './is-phone-e164/phone.js';
-import { isUrlSafe } from './is-url-safe/url.js';
-import { validateITIN } from './is-us-tin-safe/tin.js';
-import { isVatSafe } from './is-vat-safe/vat.js';
+import { isIbanSafe } from './is-iban-safe/iban.js';
+import { validateTIN } from './is-us-tin-safe/tin.js';
 
-console.log(validateCard('4111111111111111'));              // { ok: true, brand: 'visa', ... }
-console.log(isEmailSafe('user@example.com'));               // true
-console.log(isIbanSafe('DE44500105175407324931'))           // { ok: true, ... }
-console.log(isIpSafe('192.168.0.1'));                       // true
-console.log(isJsonSafe('{"user":"alice","id":123}'));       // true
-console.log(validatePassword('Aj4?mX9^kL3!yZ'));						 // { ok: true, score: 3, entropyBits: 88, ... }
-console.log(isPhoneE164('+12025550123'));                   // true
-console.log(isUrlSafe('https://example.com'));              // true
-console.log(validateITIN('12-3456789'));                    // { ok: true, type: 'ein', ... }
-console.log(isVatSafe('DE123456789'));                      // { ok: true, country: 'DE', ... }
-```
+console.log(validateCard('4111 1111 1111 1111').ok); // true
+console.log(isIpSafe('2001:db8::1'));                 // { ok: true, version: 6, issues: [] }
+console.log(isJsonSafe('{"id":1}').ok);                // true
+console.log((await isIbanSafe('DE44500105175407324931')).ok); // true
+console.log(validateTIN('12-3456789').type);         // 'ein'
+~~~
 
 ## Folder Structure
 
@@ -138,9 +133,9 @@ validators/
 
 ## Security Notes
 
-- All regexes are tested for ReDoS safety.
+- Regular expressions are simple and should still be regression-tested with untrusted inputs.
 - No dynamic code execution or eval-like patterns are used.
-- URLs are normalized before validation and restricted to `http` and `https` schemes.
+- URL validation permits only `http` and `https`; do not treat this as a network-access or SSRF policy.
 - Emails and phones are validated according to conservative subsets of relevant RFCs and ITU standards.
 
 ## Contributing
@@ -149,7 +144,7 @@ Pull requests for additional safe validators (e.g., IBAN, domain names, etc.) ar
 
 - Pure functions only (no side effects)
 - No external dependencies
-- 100% test coverage for new logic
+- Regression tests for changed behavior
 - TypeScript or plain ESM JavaScript
 
 ## License

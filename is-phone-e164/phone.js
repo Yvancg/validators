@@ -8,13 +8,12 @@
 
 /** @param {string} input */
 export function normalizePhone(input) {
-  const s = String(input ?? '').trim();
-  if (!s) return '';
-  // Remove common separators and parentheses
-  const digits = s.replace(/[()\-\s._]/g, '').replace(/^00/, '+'); // 00 -> +
-  // Ensure single leading '+'
-  if (digits.startsWith('+')) return '+' + digits.slice(1).replace(/\+/g, '');
-  return '+' + digits.replace(/\+/g, '');
+  const raw = String(input ?? '').trim();
+  if (!raw) return '';
+  const cleaned = raw.replace(/[()\-\s._]/g, '');
+  const s = cleaned.startsWith('00') ? '+' + cleaned.slice(2) : cleaned;
+  // Preserve invalid embedded '+' or other characters so validation rejects them.
+  return s.startsWith('+') ? s : '+' + s;
 }
 
 /** @param {string} input */

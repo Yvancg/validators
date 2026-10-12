@@ -4,10 +4,10 @@ let REG, COUNTRY_LENGTHS, BBAN_MAP;
 async function loadRegistry() {
   if (REG) return;
   try {
-    const mod = await import("./iban_registry_full.json", { assert: { type: "json" } });
+    const mod = await import("./iban_registry_full.json", { with: { type: "json" } });
     REG = mod.default;
   } catch {
-    const resp = await fetch("./iban_registry_full.json");
+    const resp = await fetch(new URL("./iban_registry_full.json", import.meta.url));
     if (!resp.ok) throw new Error(`IBAN registry fetch failed: ${resp.status}`);
     REG = await resp.json();
   }
