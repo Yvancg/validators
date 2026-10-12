@@ -20,6 +20,8 @@ Available modules:
   [![iban gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/iban.js.json)](./metrics/iban.js.json)
   [![iban ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/iban.json)](./bench/iban.json)
 
+- **is-iso-date-safe** — Strict Gregorian YYYY-MM-DD validation, including leap years. [Module](./is-iso-date-safe/)  
+
 - **is-ip-safe** — IPv4 and IPv6 address validator with normalization and compression-safe parsing.  
   [![ip gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/ip.js.json)](./metrics/ip.js.json)
   [![ip ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/ip.json)](./bench/ip.json)
@@ -35,6 +37,8 @@ Available modules:
 - **is-phone-e164** — E.164 international phone number validator with normalization.  
   [![phone gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/phone.js.json)](./metrics/phone.js.json)
   [![phone ops/s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/bench/phone.json)](./bench/phone.json)
+
+- **is-uuid-safe** — Canonical UUID validation with optional version checking (v1–v8, including v4/v7). [Module](./is-uuid-safe/)  
 
 - **is-url-safe** — Conservative `http(s)`-only URL validator resistant to bypass attacks.  
   [![url gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/yvancg/validators/main/metrics/url.js.json)](./metrics/url.js.json)
@@ -62,10 +66,12 @@ You can try each validator interactively in your browser:
 - [Card Validator Test](https://yvancg.github.io/validators/is-card-safe/card-test.html)
 - [Email Validator Test](https://yvancg.github.io/validators/is-email-safe/email-test.html)
 - [IBAN Validator Test](https://yvancg.github.io/validators/is-iban-safe/iban-test.html)
+- [ISO Date Validator Test](https://yvancg.github.io/validators/is-iso-date-safe/date-test.html)
 - [IP Validator Test](https://yvancg.github.io/validators/is-ip-safe/ip-test.html)
 - [JSON Validator Test](https://yvancg.github.io/validators/is-json-safe/json-test.html)
 - [Password Validator Test](https://yvancg.github.io/validators/is-password-safe/password-test.html)
 - [Phone Validator Test](https://yvancg.github.io/validators/is-phone-e164/phone-test.html)
+- [UUID Validator Test](https://yvancg.github.io/validators/is-uuid-safe/uuid-test.html)
 - [URL Validator Test](https://yvancg.github.io/validators/is-url-safe/url-test.html)
 - [US TIN Validator Test](https://yvancg.github.io/validators/is-us-tin-safe/tin-test.html)
 - [EU VAT Validator Test](https://yvancg.github.io/validators/is-vat-safe/vat-test.html)
@@ -85,6 +91,7 @@ node --experimental-default-type=module --test tests/*.test.mjs
 - `isIpSafe()`, `isJsonSafe()`, `validateCard()`, and `validateTIN()` return **result objects**, not booleans. Use their `ok` properties.
 - `isIbanSafe()` returns a **Promise** and reads `is-iban-safe/iban_registry_full.json`. Keep the JSON file next to `iban.js`.
 - JSON `maxBytes` measures UTF-8 bytes and rejects oversized input before parsing. Other structural checks happen after `JSON.parse`.
+- `isIsoDateSafe()` and `isUuidSafe()` return booleans and enforce canonical date/UUID syntax.
 - Card, TIN, VAT, email, and phone checks validate local format rules only; they do not verify real-world issuance or ownership.
 
 ## Design Principles
@@ -98,12 +105,16 @@ node --experimental-default-type=module --test tests/*.test.mjs
 ## Example usage
 ~~~js
 import { validateCard } from './is-card-safe/card.js';
+import { isIsoDateSafe } from './is-iso-date-safe/date.js';
+import { isUuidSafe } from './is-uuid-safe/uuid.js';
 import { isIpSafe } from './is-ip-safe/ip.js';
 import { isJsonSafe } from './is-json-safe/json.js';
 import { isIbanSafe } from './is-iban-safe/iban.js';
 import { validateTIN } from './is-us-tin-safe/tin.js';
 
 console.log(validateCard('4111 1111 1111 1111').ok); // true
+console.log(isIsoDateSafe('2024-02-29'));              // true
+console.log(isUuidSafe('550e8400-e29b-41d4-a716-446655440000', { version: 4 })); // true
 console.log(isIpSafe('2001:db8::1'));                 // { ok: true, version: 6, issues: [] }
 console.log(isJsonSafe('{"id":1}').ok);                // true
 console.log((await isIbanSafe('DE44500105175407324931')).ok); // true
@@ -122,10 +133,12 @@ validators/
   ├─ is-card-safe/
   ├─ is-email-safe/
   ├─ is-iban-safe/
+  ├─ is-iso-date-safe/
   ├─ is-ip-safe/
   ├─ is-json-safe/
   ├─ is-password-safe/
   ├─ is-phone-e164/
+  ├─ is-uuid-safe/
   ├─ is-url-safe/
   ├─ is-us-tin-safe/
   └─ is-vat-safe/
