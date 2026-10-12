@@ -39,7 +39,7 @@ test('VAT patterns accept 8, 9 and 10 digits for CZ', () => {
 test('JSON size limit is enforced before parsing', () => {
   const r = isJsonSafe('{', { maxBytes: 0 });
   assert.deepEqual(r.issues, ['too_large']);
-  assert.equal(isJsonSafe('{"a":"é"}', { maxBytes: 10 }).ok, false);
+  assert.equal(isJsonSafe('{"a":"é"}', { maxBytes: 9 }).ok, false);
   assert.equal(isJsonSafe('{"a":1}').ok, true);
 });
 
