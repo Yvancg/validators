@@ -55,8 +55,8 @@ export function detectBrand(d) {
   // Order matters. Check more specific first.
   if (/^4\d{12}(\d{3})?(\d{3})?$/.test(d)) return 'visa'; // 13,16,19
   // MasterCard: 51–55 or 2221–2720
-  if (/^5[1-5]\\d{14}$/.test(d) ||
-      /^2(?:2(?:2[1-9]|[3-9]\\d)|[3-6]\\d{2}|7(?:[01]\\d|20))\\d{12}$/.test(d)) return 'mastercard';
+  if (/^5[1-5]\d{14}$/.test(d) ||
+      /^2(?:2(?:2[1-9]|[3-9]\d)|[3-6]\d{2}|7(?:[01]\d|20))\d{12}$/.test(d)) return 'mastercard';
   // American Express: 34, 37 length 15
   if (/^3[47]\d{13}$/.test(d)) return 'amex';
   // Discover: 6011, 622126–622925, 644–649, 65; length 16–19
