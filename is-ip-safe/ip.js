@@ -21,27 +21,19 @@ function isIPv4Address(s) {
 }
 
 function isIPv6Address(s) {
-  if (!/^[0-9a-fA-F:.]+$/.test(s)) return false;
-  if (s.includes(':::')) return false;
-  const compressed = s.includes('::');
-  if (compressed && s.indexOf('::') !== s.lastIndexOf('::')) return false;
-  if (!compressed && (s.startsWith(':') || s.endsWith(':'))) return false;
-
-  let groups = s.split(':');
-  // IPv4-embedded forms count as two 16-bit groups.
-  const last = groups[groups.length - 1];
-  if (last.includes('.')) {
-    if (!isIPv4Address(last)) return false;
-    groups = groups.slice(0, -1).concat(['0', '0']);
+  if (!/^[0-9a-fA-F:.]+$/.test(s) || s.includes(':::')) return false;
+  // IPv4-embedded addresses use two 16-bit groups.
+  if (s.includes('.')) {
+    const at = s.lastIndexOf(':');
+    if (at < 0 || !isIPv4Address(s.slice(at + 1))) return false;
+    s = s.slice(0, at + 1) + '0:0';
   }
-  if (compressed) {
-    // split() creates two empty entries for :: (one at each side).
-    const emptyCount = groups.filter(g => g === '').length;
-    if (emptyCount !== 2) return false;
-    const nonEmpty = groups.filter(Boolean);
-    return nonEmpty.length < 8 && nonEmpty.every(g => /^[\da-fA-F]{1,4}$/.test(g));
-  }
-  return groups.length === 8 && groups.every(g => /^[\da-fA-F]{1,4}$/.test(g));
+  const pieces = s.split('::');
+  if (pieces.length > 2) return false;
+  const parse = part => part ? part.split(':') : [];
+  const groups = parse(pieces[0]).concat(parse(pieces[1] ?? ''));
+  if (!groups.every(g => /^[0-9a-fA-F]{1,4}$/.test(g))) return false;
+  return pieces.length === 2 ? groups.length < 8 : groups.length === 8;
 }
 
 export function isIPv4(raw) { const r = isIpSafe(raw); return r.version === 4 && r.ok; }
