@@ -1,11 +1,6 @@
 name: update bench metrics
+# Benchmarks update badges only when manually triggered.
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'is-*/**/*.js'
-      - 'scripts/bench.mjs'
-      - '.github/workflows/bench.yml'
   workflow_dispatch:
 
 permissions:
@@ -28,7 +23,6 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/bench.mjs
-        continue-on-error: true
 
       - name: Commit and push results
         run: |

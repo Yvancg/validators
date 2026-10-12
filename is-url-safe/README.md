@@ -84,6 +84,8 @@ Returns an empty string if invalid.
 
 ---
 
+For URL serialization, `normalizeUrl()` preserves explicit ports, credentials, query strings, and fragments using native `URL.href`. It only accepts HTTP(S) URLs. Neither validation nor normalization is a network-access or SSRF safety check.
+
 ## 🧪 Browser test
 
 Clone the repo, open `url-test.html` — interactive test in your browser  

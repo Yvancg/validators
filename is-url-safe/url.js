@@ -28,9 +28,12 @@ export function isUrlSafe(raw) {
 }
 
 export function normalizeUrl(raw) {
+  if (typeof raw !== 'string') return '';
   try {
     const u = new URL(raw.trim());
-    return `${u.protocol}//${u.hostname}${u.pathname}${u.search}${u.hash}`;
+    // Native serialization preserves non-default ports, credentials, path,
+    // query and fragment. Never rebuild a URL from selected components.
+    return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : '';
   } catch {
     return '';
   }

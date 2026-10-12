@@ -87,6 +87,8 @@ Run regression tests with Node.js 22 or newer:
 node --experimental-default-type=module --test tests/*.test.mjs
 ~~~
 
+Benchmark/gzip badge refreshes are manual; correctness tests remain automatic on PRs and pushes.
+
 ## API behavior
 - `isIpSafe()`, `isJsonSafe()`, `validateCard()`, and `validateTIN()` return **result objects**, not booleans. Use their `ok` properties.
 - `isIbanSafe()` returns a **Promise** and reads `is-iban-safe/iban_registry_full.json`. Keep the JSON file next to `iban.js`.
