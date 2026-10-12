@@ -34,7 +34,7 @@ const targets = [
   { name: 'password', fn: () => validatePassword('Aj4?mX9^kL3!yZ'), 						iters: 8000 },
 ];
 
-let wrote = 0;
+let wrote = 0, failed = 0;
 for (const t of targets) {
   try {
     const ops = await bench(t.fn, t.iters);
@@ -51,8 +51,9 @@ for (const t of targets) {
     writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
     wrote++;
   } catch {
+    failed++;
     const json = { schemaVersion: 1, label: 'speed', message: 'error', color: 'red' };
     writeFileSync(`bench/${t.name}.json`, JSON.stringify(json, null, 2));
   }
 }
-if (!wrote) process.exit(1);
+if (!wrote || failed) process.exitCode = 1;
