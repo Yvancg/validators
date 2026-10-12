@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>UUID validator</title>
+<h1>UUID validator</h1>
+<label>UUID <input id="value" size="38" value="550e8400-e29b-41d4-a716-446655440000"></label>
+<button id="check">Validate</button><output id="result"></output>
+<script type="module">
+import { isUuidSafe } from './uuid.js';
+const check = () => document.querySelector('#result').textContent =
+  isUuidSafe(document.querySelector('#value').value) ? 'Valid' : 'Invalid';
+document.querySelector('#check').addEventListener('click', check);
+check();
+</script>
