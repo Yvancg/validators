@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>ISO date validator</title>
+<h1>ISO date validator</h1>
+<label>Date <input id="value" value="2024-02-29"></label>
+<button id="check">Validate</button><output id="result"></output>
+<script type="module">
+import { isIsoDateSafe } from './date.js';
+const check = () => document.querySelector('#result').textContent =
+  isIsoDateSafe(document.querySelector('#value').value) ? 'Valid' : 'Invalid';
+document.querySelector('#check').addEventListener('click', check);
+check();
+</script>
