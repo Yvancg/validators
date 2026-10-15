@@ -1,0 +1,73 @@
+name: One-time prune confirmed merged branches
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/one-time-prune-merged-branches.yml'
+permissions:
+  contents: write
+  pull-requests: read
+jobs:
+  prune:
+    if: github.repository_owner == 'Yvancg'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete safely verified merged PR branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          from urllib.request import Request, urlopen
+          from urllib.parse import quote
+          base = 'https://api.github.com/repos/' + os.environ['REPO']
+          headers = {
+              'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28',
+              'User-Agent': 'temporary-merged-branch-cleanup'
+          }
+          def api(route, method='GET'):
+              request = Request(base + route, headers=headers, method=method)
+              with urlopen(request, timeout=30) as response:
+                  result = response.read()
+                  return json.loads(result) if result else None
+          def pages(route):
+              out = []
+              for page in range(1, 20):
+                  batch = api(route + ('&' if '?' in route else '?') + 'per_page=100&page=' + str(page))
+                  out.extend(batch)
+                  if len(batch) < 100:
+                      break
+              return out
+          repo = os.environ['REPO']
+          branches = pages('/branches?protected=false')
+          merged = pages('/pulls?state=closed')
+          open_prs = pages('/pulls?state=open')
+          protected_names = {'main','master','develop','dev','staging','production','gh-pages','installer','release/clawdate-controlled-cutover-20261013'}
+          def from_repo(pr):
+              return (pr.get('head',{}).get('repo') or {}).get('full_name') == repo
+          active = {pr['head']['ref'] for pr in open_prs if from_repo(pr)}
+          count=0
+          skipped=0
+          for branch in branches:
+              name=branch['name']
+              sha=branch['commit']['sha']
+              if name in protected_names or branch.get('protected', False) or name in active:
+                  skipped+=1;continue
+              qualifying=[pr for pr in merged if pr.get('merged_at') and
+                  pr.get('base',{}).get('ref') == 'main' and from_repo(pr) and
+                  pr.get('head',{}).get('ref') == name and pr.get('head',{}).get('sha') == sha]
+              if not qualifying:
+                  skipped+=1;continue
+              current=api('/branches/'+quote(name,safe=''))
+              if current['commit']['sha']!=sha or current.get('protected',False):
+                  print('SKIP updated/protected:',name);skipped+=1;continue
+              print('DELETE merged branch:', name, 'PR', qualifying[0]['number'], flush=True)
+              api('/git/refs/heads/'+quote(name,safe=''), 'DELETE')
+              count+=1
+          print('TOTAL_DELETED:',count,'SKIPPED:',skipped,flush=True)
+          PY
